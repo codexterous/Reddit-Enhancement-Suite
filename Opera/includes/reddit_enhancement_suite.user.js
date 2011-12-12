@@ -11,31 +11,31 @@
 // @include       https://reddit.com/*
 // @include       http://*.reddit.com/*
 // @include       https://*.reddit.com/*
-// @version       4.0.2
+// @version       4.0.3+WIDI
 // @updateURL     http://redditenhancementsuite.com/latest/reddit_enhamcement_suite.meta.js
 // @installURL    http://redditenhancementsuite.com/test/reddit_enhancement_suite.user.js
 // @require       http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js
 // ==/UserScript==
 
-var RESVersion = "4.0.3";
+var RESVersion = "4.0.3+WIDI";
 
 /*
 	Reddit Enhancement Suite - a suite of tools to enhance Reddit
 	Copyright (C) 2010-2011 - honestbleeps (steve@honestbleeps.com)
 
 	RES is released under the GPL. However, I do ask a favor (obviously I don't/can't require it, I ask out of courtesy):
-	
+
 	Because RES auto updates and is hosted from a central server, I humbly request that if you intend to distribute your own
 	modified Reddit Enhancement Suite, you name it something else and make it very clear to your users that it's your own
 	branch and isn't related to mine.
-	
-	RES is updated very frequently, and I get lots of tech support questions/requests from people on outdated versions. If 
-	you're distributing RES via your own means, those recipients won't always be on the latest and greatest, which makes 
-	it harder for me to debug things and understand (at least with browsers that auto-update) whether or not people are on 
+
+	RES is updated very frequently, and I get lots of tech support questions/requests from people on outdated versions. If
+	you're distributing RES via your own means, those recipients won't always be on the latest and greatest, which makes
+	it harder for me to debug things and understand (at least with browsers that auto-update) whether or not people are on
 	a current version of RES.
-	
+
 	I can't legally hold you to any of this - I'm just asking out of courtesy.
-	
+
 	Thanks, I appreciate your consideration.  Without further ado, the all-important GPL Statement:
 
     This program is free software: you can redistribute it and/or modify
@@ -69,7 +69,6 @@ tokenizeCSS += 'div.token-input-dropdown-facebook ul li.token-input-dropdown-ite
 tokenizeCSS += 'div.token-input-dropdown-facebook ul li em { font-weight: bold; font-style: normal;}';
 tokenizeCSS += 'div.token-input-dropdown-facebook ul li.token-input-selected-dropdown-item-facebook { background-color: #3b5998; color: #fff;}';
 
-
 var guidersCSS = '.guider { background: #FFF; border: 1px solid #666; font-family: arial; position: absolute; outline: none; z-index: 100000005 !important; padding: 4px 12px; width: 500px; z-index: 100; -moz-box-shadow: 0 0px 8px #111; -webkit-box-shadow: 0 0px 8px #111; box-shadow: 0 0px 8px #111; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;}';
 guidersCSS += '.guider_buttons { height: 36px; position: relative; width: 100%; }';
 guidersCSS += '.guider_content { position: relative; }';
@@ -83,18 +82,15 @@ guidersCSS += '.guider_button { background: -moz-linear-gradient(top, #5CA9FF 0%
 guidersCSS += '#guider_overlay { background-color: #000; width: 100%; height: 100%; position: fixed; top: 0px; left: 0px; opacity: 0.5; filter: alpha(opacity=50); z-index: 1000; }';
   /**
    * For optimization, the arrows image is inlined in the css below.
-   * 
+   *
    * To use your own arrows image, replace this background-image with your own arrows.
    * It should have four arrows, top, right, left, and down.
-   */ 
+   */
 guidersCSS += '.guider_arrow { width: 42px; height: 42px; position: absolute; display: none; background-repeat: no-repeat; z-index: 100000006 !important; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACoAAACoCAYAAACWu3yIAAAJQ0lEQVR42u2cW2sVVxiGk2xz0EQFTRTBnEBFEpMLDxVyMPceoigRvVFjcqsSTaKCJAhC0Ozkpj+gFPIHWm2htPQfiChoVaqglDYeqP0Hdr3hXWFlZWb2WjNr1syGDHzilT48ew5r3u+bVXHgwIGCqCpWJerr168VeasKAVbPWi+qVtQ6CZ030J2sHaIaRW0UVZc3YIAeFPWNqP2iOkS1imrKGzBAz4g6L2pI1DFRfaL2acCZnxIV79+///PevXvfCYBpUeOihkUN5g0Yfywdr169WpycnPxZABRFTRL4RF6Al0Hl8eLFi88EntWAe7MEXgUqj+fPn3/KE3AoqAL88caNGz9lDVwSNC/AxqAq8NjY2CMCT4i65APYGlQez5498wocG1QDfigAHijAxwncSeBGHdg7qDyePn36IQS4h8AtBG4gcMEG2BmoCnzlypUfXQM7B1WAFxVgPJovKsBY/DSL2solZk2p8zc1UHk8efLkHwH8g4C4T+ALoo5yxbZH1HaevzVRZlMHlcfjx48l8Iyoq1yt9REWd4cNuNAyB1UM/3Xt2rUFATUm6rSoQzxvN4mqDvv5vYPK4+XLl3/cvXt3SoANiNolagt//nyBLi4u/r2wsPAtQXcTtDY3oO/evftSLBYf8sLCeXqYD4XNufjpBeB/MzMzv3Nhfl3UOdrcyyu/nk+tbEABKF51ADgv6raoEb7q9BByBy+k2kxuT2/fvtUBR0WdEnVEVLeoNt6W1CeUvxt+AOCIBtguahstGr+OV7gEFLeb3wh4yxWgM1AATk1N/RoA2O8CMDGoAPziAzA26Js3b/4l4JwPQGvQ169fBwGeTBvQGNQAsC1NwJKgALxz584vBLwp6rIC2OULMBRUZFCfCVjMA+AqUGHwYx4BV8SOYrHwPWPHCQLK2FEFzDTYVYPcs3z5yhVgWDTeqSwWcheNl02zoWzaN2XTECvQ6E6er2dwJ8jqpQ//Ny/wg2QCW6GCJiUoLqrzuF1lBcoOzXmySNAqCbqeF9N+3qam8QDwDYnODO/nQ2TZQbYl0EpeRI28PeFeOoGnlG9QNjfG2ZjrINPSu74EXcfbUhtv+Hg6FfHc9wWJthEf38NkaCXT0iv00hXFn7+ON/ouPkJv+rRKm5P8v/eRpU6+QkvQUKtY7qUNiZ4WewGBNpdBNavbaPWkL6uKzRNBNnVQ3Wo/rc6laRXtoFI2V4BGWcWrSFqgbLLpNlfFOzqoV6uazd4wm6tAI6zeSsOqqc0wUGl1k2IVb55zeKfPwmYgqC+rbE8a2YwCDbWKKMdFW9LGZihogNVul1Zpc8LUZinQMKvzSPAc2LxkajMSNMTqqaRW2di1smkCqlptT2oVDV32Rq1slgSNsop02ZdNU1AnVpPYNAKNsoqmgikoW+ITfIOwsmkDmsgqevdJbBqDRli9bWJVs9lpa9MWVLd6RFpFdy5qsECx2RPHphVoXKscJhhXbDba2owDGmR1NMwqph44onGRNlvi2LQGjbKKznFaNuOChp2rRfTi1ZEMzo9cUGw2xLEZCzTEKt7Fr2NgQIJybuQqJ3I6kthMAqqvrHo4KDCOEQzMi3C4ZYhhVzNtFpJ0RZJabeKAAKYZhjAnwqGW08q40NYkNpOCSqsNTN32cj5kgHVIGcCqT2IzEahitZanwHbezHdzPKhFaVrUJLHpArSSiXUtrW3mWNAWwm9wAZkYVIGt4mlQTega/t1Z48JZM0A2KtRy3Qsti1oDXQNdA012B5Gtz0IeAeU9uZbNsKWmch4B6/jYbeQaYqlNn0fAJi4dO9lmxDLxYJ4AtxGwi8vD4+zLooF7Jo+Ag2xwIAeYRqcbrfGsADdpgP0Mii9zlKmIRpza4c4lYFCzOC+AczQY2nXxCditAI5wIHEO6bVJsy1twPakgE5ADQFP6YBxGmu+AOcBmKRH5QswdrvHCtQA8IgOiGaEC0AjUEtAfBwwj6zUJWBJUO2dvUFZLKiAo2kDmoCqKYiMbHr4LF5hMCoaTxVUyZXqGdXIEOwcP/EpIrj1AWgCWs2IppXhFyLEcWSgamCbB9BaZkgIvQYQJyL7zGq4MAq0hqBI5gaQeSKgzSNoNS+kFmadCGbHEHkjn88FKGHXMTZsYiDbx/MUufwMOh5oz+QBtIo//0Ze+Xv4onWUnQ60Ze4DGN25LEErFdh65vDN7HD08OXrIoEfoN+J5qx3UM2s+oRq5HnbqQBf4suYBP7gHTQuMKYdXALHbTDIyEUmGq0E7g0CxmSOd9CQjEgmHK2cbujl3IgEnsWsUxJg16GWETDm8ryCxgAe5jzeLCYdbYDTjg2dAfvKOUsCY84ZQ9leQZMCYybfK6gFcJ8GXAQwPsnwCmoJPEhgPJqn8ZGLt9gxJvAxrtb8B7kW0XgrFz/ZRuNl12wou/ZN2TXE1nqha6BlDSquKJdVGVBO/m1XcOo4UQ3vgSvGifIAKt/9NzACkgNam3mzXt4nJ0tQNU1p4uvzLiaArUxYlnceyhK0oIS9eximySHCw8o2ScsDrk5BLQcItyoh2mnEk9zCa0jZeGrV55Ml/m2noAWaauZSDGBjyFAR+HLhe44pShtPAaOxYWegis1GrhuR8F1FdipfHbjv2HWu2LvZ9jGy6gRUG3BtoTHEkDNqwIucnx9Nj7Dd025q1RVoVcBn7uPISfU3R26Wdps9KWOriUG1D1ylTWSk94PSZ7R3uB/UqI1VF6DGNuXB/cmsrCYC1Wy20ibCrwdR0bhi1fhcTQoqbTapWzAgYS6VG9lajQ0aYLNX2jTJ7dHMVaz2l7KaBFS1uc/Gpmb1lonVWKAlbBpn9DZW44LqNhFmTSCbt02NuQFgSavWoK5s2lqNA+rMpjy4Y1ykVSvQCJuzSbobAVZXraxsQcNsPkraM1KsngyyarPCD7I5nNSmYvUL9+MLtGoDGmRz0oXNEKtdqlVT0FCbcRpZYQfm82ysGttEP8h1x9jGaiY25YGxTFq9rFjdGGQ1M5ua1ZulrEbZ7EvTpq1V3WadbhONqbTnRbj5ZaRVE5uf0gal1SKt9gVZDbM56MtmgNVBWm1SrUbZLAY1T9M6MHsfZVXfjq6Drb1xnzY1qxMBn7lXBm3whwxpWu3s+jrwyQU3+DsbtMHfqi0T0dHNaliQu8sGbplYFptQ/g/UqiA7u61evwAAAABJRU5ErkJggg==); }  ';
 guidersCSS += '.guider_arrow_right { display: block; background-position: 0px 0px; right: -42px; }';
 guidersCSS += '.guider_arrowdown { display: block; background-position: 0px -42px; bottom: -42px; }';
 guidersCSS += '.guider_arrow_up { display: block; background-position: 0px -126px; top: -42px; }';
 guidersCSS += '.guider_arrow_left { display: block; background-position: 0px -84px; left: -42px;}';
-
-
-
 
 // DOM utility functions
 function insertAfter( referenceNode, newNode ) {
@@ -279,7 +275,7 @@ function keyArrayCompare(fromArr, toArr) {
 	}
 	if (fromArr.length != toArr.length) return false;
 	for (var i = 0; i < toArr.length; i++) {
-		if (fromArr[i].compare) { 
+		if (fromArr[i].compare) {
 			if (!fromArr[i].compare(toArr[i])) return false;
 		}
 		if (fromArr[i] !== toArr[i]) return false;
@@ -317,7 +313,6 @@ function removeClass(ele,cls) {
 // This really shouldn't be necessary, but I can't seem to hold on to an onload function that I pass to the background page...
 xhrQueue = { count: 0, onloads: [] };
 
-
 // if this is a jetpack addon, add an event listener like Safari's message handler...
 if (typeof(self.on) == 'function') {
 	self.on('message', function(msgEvent) {
@@ -339,7 +334,7 @@ if (typeof(self.on) == 'function') {
 				break;
 			case 'getLocalStorage':
 				// TODO: this needs to be done for jetpack
-				// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy 
+				// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 				// old schol localStorage from the foreground page to the background page to keep their settings...
 				if (typeof(msgEvent.message.importedFromForeground) == 'undefined') {
 					// it doesn't exist.. copy it over...
@@ -389,7 +384,7 @@ function safariMessageHandler(msgEvent) {
 			thisExpando.style.display = 'block';
 			break;
 		case 'getLocalStorage':
-			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy 
+			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 			// old schol localStorage from the foreground page to the background page to keep their settings...
 			if (typeof(msgEvent.message.importedFromForeground) == 'undefined') {
 				// it doesn't exist.. copy it over...
@@ -437,7 +432,7 @@ function operaMessageHandler(msgEvent) {
 			thisExpando.style.display = 'block';
 			break;
 		case 'getLocalStorage':
-			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy 
+			// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 			// old schol localStorage from the foreground page to the background page to keep their settings...
 			if (typeof(eventData.data.importedFromForeground) == 'undefined') {
 				// it doesn't exist.. copy it over...
@@ -527,8 +522,6 @@ if (typeof(unsafeWindow) != 'undefined') {
 	}
 }
 
-
-
 // GreaseMonkey API compatibility for non-GM browsers (Chrome, Safari, Firefox)
 // @copyright      2009, 2010 James Campos
 // @modified		2010 Steve Sobel - added some missing gm_* functions
@@ -575,11 +568,11 @@ if ((typeof GM_deleteValue == 'undefined') || (typeof GM_addStyle == 'undefined'
 		value = (typeof value)[0] + value;
 		localStorage.setItem(name, value);
 	}
-	
+
 	if (typeof(chrome) != 'undefined') {
 		GM_xmlhttpRequest = function(obj) {
 			var crossDomain = (obj.url.indexOf(location.hostname) == -1);
-			
+
 			if ((typeof(obj.onload) != 'undefined') && (crossDomain)) {
 				obj.requestType = 'GM_xmlhttpRequest';
 				if (typeof(obj.onload) != 'undefined') {
@@ -615,11 +608,11 @@ if ((typeof GM_deleteValue == 'undefined') || (typeof GM_addStyle == 'undefined'
 			// Turns out, Opera works this way too, but I'll forgive them since their extensions are so young and they're awesome people...
 			// Really though, we need callbacks like Chrome has!  This is such a hacky way to emulate GM_xmlhttpRequest.
 
-			// oy vey... another problem. When Opera sends xmlhttpRequests from the background page, it loses the cookies etc that it'd have 
-			// had from the foreground page... so we need to write a bit of a hack here, and call different functions based on whether or 
+			// oy vey... another problem. When Opera sends xmlhttpRequests from the background page, it loses the cookies etc that it'd have
+			// had from the foreground page... so we need to write a bit of a hack here, and call different functions based on whether or
 			// not the request is cross domain... For same-domain requests, we'll call from the foreground...
 			var crossDomain = (obj.url.indexOf(location.hostname) == -1);
-			
+
 			if ((typeof(obj.onload) != 'undefined') && (crossDomain)) {
 				obj.XHRID = xhrQueue.count;
 				xhrQueue.onloads[xhrQueue.count] = obj.onload;
@@ -657,7 +650,6 @@ if ((typeof GM_deleteValue == 'undefined') || (typeof GM_addStyle == 'undefined'
 		}, 0);
 	}
 }
-
 
 var RESConsoleContainer = '';
 var modalOverlay = '';
@@ -760,15 +752,15 @@ var RESUtils = {
 		RESStorage.setItem('RESoptions.' + moduleID, JSON.stringify(modules[moduleID].options));
 		return true;
 	},
-	click: function(obj, button) { 
+	click: function(obj, button) {
 		var button = button || 0;
 		var evt = document.createEvent('MouseEvents');
-		evt.initMouseEvent('click', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, button, null); obj.dispatchEvent(evt); 
+		evt.initMouseEvent('click', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, button, null); obj.dispatchEvent(evt);
 	},
-	mousedown: function(obj, button) { 
+	mousedown: function(obj, button) {
 		var button = button || 0;
 		var evt = document.createEvent('MouseEvents');
-		evt.initMouseEvent('mousedown', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, button, null); obj.dispatchEvent(evt); 
+		evt.initMouseEvent('mousedown', true, true, window, 0, 1, 1, 1, 1, false, false, false, false, button, null); obj.dispatchEvent(evt);
 	},
 	loggedInUser: function() {
 		if (typeof(this.loggedInUserCached) == 'undefined') {
@@ -843,7 +835,7 @@ var RESUtils = {
 				pageType = 'linklist';
 			}
 			this.pageTypeSaved = pageType;
-		} 
+		}
 		return this.pageTypeSaved;
 	},
 	currentSubreddit: function(check) {
@@ -911,13 +903,13 @@ var RESUtils = {
 			cursor.x = e.pageX;
 			cursor.y = e.pageY;
 		} else {
-			cursor.x = e.clientX + 
-				(document.documentElement.scrollLeft || 
-				document.body.scrollLeft) - 
+			cursor.x = e.clientX +
+				(document.documentElement.scrollLeft ||
+				document.body.scrollLeft) -
 				document.documentElement.clientLeft;
-			cursor.y = e.clientY + 
-				(document.documentElement.scrollTop || 
-				document.body.scrollTop) - 
+			cursor.y = e.clientY +
+				(document.documentElement.scrollTop ||
+				document.body.scrollTop) -
 				document.documentElement.clientTop;
 		}
 		RESUtils.mouseX = cursor.x;
@@ -1125,7 +1117,7 @@ var RESUtils = {
 				if (tempArray[2] == 'true') keyComboString += 'ctrl-';
 				if (tempArray[3] == 'true') keyComboString += 'shift-';
 				if (tempArray[4] == 'true') keyComboString += 'command-';
-			} 
+			}
 			testCode = parseInt(charCode);
 		} else if (typeof(charCode) == 'object') {
 			testCode = parseInt(charCode[0]);
@@ -1163,7 +1155,7 @@ var RESUtils = {
 				niceString = "escape"; //  escape
 				break;
 			case 33:
-				niceString = "page up"; // page up, to avoid displaying alternate character and confusing people	         
+				niceString = "page up"; // page up, to avoid displaying alternate character and confusing people
 				break;
 			case 34:
 				niceString = "page down"; // page down
@@ -1406,7 +1398,7 @@ var RESUtils = {
 		}
 
 		var returnString = '';
-		
+
 		if (dyear==0) {y=0}
 		if (dmonth==0) {mm=0}
 		if (dday==0) {d=0}
@@ -1495,21 +1487,21 @@ var RESUtils = {
 					insertAfter(textDesc, this.submittingToEnhancement);
 					setTimeout(function() {
 						$('#RESSubmitBug').click(
-							function() { 
+							function() {
 								$('#RESSubmitOptions').fadeOut(
 									function() { $('#RESBugReport').fadeIn(); }
 								);
 							}
 						);
 						$('#RESSubmitFeatureRequest').click(
-							function() { 
+							function() {
 								$('#RESSubmitOptions').fadeOut(
 									function() { $('#RESFeatureRequest').fadeIn(); }
 								);
 							}
 						);
 						$('#submittingBug').click(
-							function() { 
+							function() {
 								$('li a.text-button').click();
 								$('#submittingToEnhancement').fadeOut();
 								var thisBrowser;
@@ -1538,13 +1530,13 @@ var RESUtils = {
 							}
 						);
 						$('#submittingFeature').click(
-							function() { 
+							function() {
 								$('#submittingToEnhancement').fadeOut();
 								title.value = '[feature request] Please summarize your feature request here, and elaborate in the selftext.';
 							}
 						);
 						$('#RESSubmitOther').click(
-							function() { 
+							function() {
 								$('#submittingToEnhancement').fadeOut();
 								title.value = '';
 							}
@@ -1558,7 +1550,7 @@ var RESUtils = {
 					}
 				}
 			}
-		} 
+		}
 	},
 	urlencode: function(string) {
 		// Javascript's escape function is stupid, and ignores the + character. Why? I have no idea.
@@ -1589,7 +1581,7 @@ var RESUtils = {
 		}
 		return utftext;
 	},
- 
+
 	// private method for UTF-8 decoding
 	_utf8_decode: function (utftext) {
 		var string = "";
@@ -1762,7 +1754,7 @@ var RESUtils = {
 			x1 = x1.replace(rgx, '$1' + ',' + '$2');
 		}
 		return x1 + x2;
-	}	
+	}
 }
 // end RESUtils;
 
@@ -1770,7 +1762,7 @@ var RESUtils = {
 var gdAlert = {
 	container: false,
 	overlay: "",
-	
+
 	init: function(callback) {
 		//init
 		var alertCSS = '#alert_message { ' +
@@ -1809,11 +1801,11 @@ var gdAlert = {
 			'}';
 
 		GM_addStyle(alertCSS);
-		
+
 		gdAlert.populateContainer(callback);
 
 	},
-	
+
 	populateContainer: function(callback) {
 		gdAlert.container = createElementWithID('div','alert_message');
 		gdAlert.container.appendChild(document.createElement('span'));
@@ -1844,9 +1836,9 @@ var gdAlert = {
 		br.setAttribute('style','clear: both');
 		gdAlert.container.appendChild(br);
 		document.body.appendChild(gdAlert.container);
-	
+
 	},
-	
+
 	open: function(text, callback) {
 		if (gdAlert.isOpen) {
 			console.log('there is already an alert open. break out.');
@@ -1854,12 +1846,12 @@ var gdAlert = {
 		}
 		gdAlert.isOpen = true;
 		gdAlert.populateContainer(callback);
-	
+
 		//set message
 		gdAlert.container.getElementsByTagName("SPAN")[0].innerHTML = text;
 		gdAlert.container.getElementsByTagName("INPUT")[0].focus();
 		gdAlert.container.getElementsByTagName("INPUT")[0].focus();
-		
+
 		//create site overlay
 		gdAlert.overlay = document.createElement("DIV");
 		gdAlert.overlay.style.width = gdAlert.getPageSize()[0] + "px";
@@ -1869,9 +1861,9 @@ var gdAlert = {
 		gdAlert.overlay.style.left = '0';
 		gdAlert.overlay.style.position = 'absolute';
 		gdAlert.overlay.style.zIndex = '9999';
-		
+
 		document.body.appendChild(gdAlert.overlay);
-		
+
 		// center messagebox (requires prototype functions we don't have, so we'll redefine...)
 		// var arrayPageScroll = document.viewport.getScrollOffsets();
         // var winH = arrayPageScroll[1] + (document.viewport.getHeight());
@@ -1879,10 +1871,10 @@ var gdAlert = {
 		var arrayPageScroll = [ document.documentElement.scrollLeft , document.documentElement.scrollTop ];
         var winH = arrayPageScroll[1] + (window.innerHeight);
         var lightboxLeft = arrayPageScroll[0];
-		
+
 		gdAlert.container.style.top = ((winH / 2) - 90) + "px";
 		gdAlert.container.style.left = ((gdAlert.getPageSize()[0] / 2) - 155) + "px";
-		
+
 		/*
 		new Effect.Appear(gdAlert.container, {duration: 0.2});
 		new Effect.Opacity(gdAlert.overlay, {duration: 0.2, to: 0.8});
@@ -1890,24 +1882,23 @@ var gdAlert = {
 		RESUtils.fadeElementIn(gdAlert.container, 0.3);
 		RESUtils.fadeElementIn(gdAlert.overlay, 0.3);
 	},
-	
+
 	close: function() {
 		gdAlert.isOpen = false;
 		/*
 		new Effect.Fade(gdAlert.container, {duration: 0.3});
 		new Effect.Fade(gdAlert.overlay, {duration: 0.3, afterFinish: function() {
 			document.body.removeChild(gdAlert.overlay);
-		}});	
+		}});
 		*/
 		RESUtils.fadeElementOut(gdAlert.container, 0.3);
 		RESUtils.fadeElementOut(gdAlert.overlay, 0.3);
 	},
-	
+
 	getPageSize: function() {
-	        
 		var xScroll, yScroll;
-		
-		if (window.innerHeight && window.scrollMaxY) {	
+
+		if (window.innerHeight && window.scrollMaxY) {
 			xScroll = window.innerWidth + window.scrollMaxX;
 			yScroll = window.innerHeight + window.scrollMaxY;
 		} else if (document.body.scrollHeight > document.body.offsetHeight){ // all but Explorer Mac
@@ -1917,12 +1908,12 @@ var gdAlert = {
 			xScroll = document.body.offsetWidth;
 			yScroll = document.body.offsetHeight;
 		}
-	
+
 		var windowWidth, windowHeight;
-	
+
 		if (self.innerHeight) {	// all except Explorer
 			if(document.documentElement.clientWidth){
-				windowWidth = document.documentElement.clientWidth; 
+				windowWidth = document.documentElement.clientWidth;
 			} else {
 				windowWidth = self.innerWidth;
 			}
@@ -1933,22 +1924,22 @@ var gdAlert = {
 		} else if (document.body) { // other Explorers
 			windowWidth = document.body.clientWidth;
 			windowHeight = document.body.clientHeight;
-		}	
-	
+		}
+
 		// for small pages with total height less then height of the viewport
 		if(yScroll < windowHeight){
 			pageHeight = windowHeight;
-		} else { 
+		} else {
 			pageHeight = yScroll;
 		}
-	
+
 		// for small pages with total width less then width of the viewport
-		if(xScroll < windowWidth){	
-			pageWidth = xScroll;		
+		if(xScroll < windowWidth){
+			pageWidth = xScroll;
 		} else {
 			pageWidth = windowWidth;
 		}
-	
+
 		return [pageWidth,pageHeight];
 	}
 }
@@ -2749,7 +2740,6 @@ a.RESNotificationButtonBlue { \
 .RESButton:hover { background-color: #DDDDDD;  } \
 ');
 
-
 // define the RESConsole class
 var RESConsole = {
 	// make the modules panel accessible to this class for updating (i.e. when preferences change, so we can redraw it)
@@ -2770,7 +2760,7 @@ var RESConsole = {
 		this.prefsDropdown = createElementWithID('div','RESPrefsDropdown');
 		this.prefsDropdown.innerHTML = '<div id="RESMainGearOverlay" class="RESGearOverlay"><div class="gearIcon"></div></div><ul id="RESDropdownOptions"><li id="SettingsConsole">settings console</li></ul>';
 		var thisSettingsButton = this.prefsDropdown.querySelector('#SettingsConsole');
-		thisSettingsButton.addEventListener('click', function() { 
+		thisSettingsButton.addEventListener('click', function() {
 			RESConsole.hidePrefsDropdown();
 			RESConsole.open();
 		}, true);
@@ -2849,7 +2839,7 @@ var RESConsole = {
 		if ((typeof(prefs) != 'undefined') && (prefs != 'undefined') && (prefs)) {
 			this.getAllModulePrefsCached = prefs;
 			return prefs;
-		} 
+		}
 	},
 	getModulePrefs: function(moduleID) {
 		if (moduleID) {
@@ -2920,7 +2910,7 @@ var RESConsole = {
 			var RESOutdated = document.createElement('div');
 			RESOutdated.setAttribute('class','outdated');
 			RESOutdated.innerHTML = 'There is a new version of RES! <a target="_blank" href="http://redditenhancementsuite.com/download">click to grab it</a>';
-			RESConsoleTopBar.appendChild(RESOutdated); 
+			RESConsoleTopBar.appendChild(RESOutdated);
 		}
 		*/
 		this.categories = [];
@@ -3069,7 +3059,7 @@ var RESConsole = {
 			if (i == 0) var firstModuleButton = thisModuleButton;
 		}
 		this.RESConsoleConfigPanel.appendChild(this.RESConfigPanelModulesPane);
-		
+
 		RESConfigPanelOptions = createElementWithID('div', 'RESConfigPanelOptions');
 		RESConfigPanelOptions.innerHTML = '<h1>RES Module Configuration</h1> Select a module from the column at the left to enable or disable it, and configure its various options.';
 		this.RESConsoleConfigPanel.appendChild(RESConfigPanelOptions);
@@ -3512,7 +3502,7 @@ var RESConsole = {
 				}
 			}
 		}
-		
+
 		var statusEle = document.getElementById('moduleOptionsSaveStatus');
 		statusEle.innerHTML = 'Options have been saved...';
 		statusEle.setAttribute('style','display: block; opacity: 1');
@@ -3526,7 +3516,7 @@ var RESConsole = {
 		if (moduleID == 'RESPro') RESStorage.removeItem('RESmodules.RESPro.lastAuthFailed');
 	},
 	drawAboutPanel: function() {
-		RESConsoleAboutPanel = this.RESConsoleAboutPanel; 
+		RESConsoleAboutPanel = this.RESConsoleAboutPanel;
 		var AboutPanelHTML = ' \
 <div id="RESAboutPane"> \
 	<div id="Button-DonateRES" class="moduleButton active">Donate</div> \
@@ -3566,6 +3556,8 @@ var RESConsole = {
 		<p>If you want to contact me directly with suggestions, bug reports or just want to say you appreciate the work, an <a href="mailto:steve@honestbleeps.com">email</a> would be great.</p> \
 		<p>License: Reddit Enhancement Suite is released under the <a target="_blank" href="http://www.gnu.org/licenses/gpl-3.0.html">GPL v3.0</a>.</p> \
 		<p><strong>Note:</strong> Reddit Enhancement Suite will check, at most once a day, to see if a new version is available.  No data about you is sent to me nor is it stored.</p> \
+    <p></p> \
+    <p>This version of Reddit Enhancement Suite is the +WIDI version. It\'s a fork of RES with small changes to make optional and disable by default the "RES ignored duplicate image" expando "feature". If you update RES, you\'ll probably wind up re-enabling this feature. The most recent source for these modifications can be found <a href="https://github.com/codexterous/Reddit-Enhancement-Suite">on github</a>.</p> \
 	</div> \
 	<div id="RESTeam" class="aboutPanel"> \
 		<h3>About the RES Team</h3> \
@@ -3640,7 +3632,7 @@ var RESConsole = {
 			modules['RESPro'].authenticate(modules['RESPro'].saveModuleData('saveComments'));
 		}, false);
 		RESConsoleProPanel.appendChild(this.proSaveCommentsSaveButton);
-		
+
 		this.proSubredditManagerSaveButton = createElementWithID('div','RESProSubredditManagerSave');
 		this.proSubredditManagerSaveButton.setAttribute('class','RESButton');
 		this.proSubredditManagerSaveButton.innerHTML = 'Save subreddits to server';
@@ -3650,7 +3642,7 @@ var RESConsole = {
 			modules['RESPro'].authenticate(modules['RESPro'].saveModuleData('subredditManager'));
 		}, false);
 		RESConsoleProPanel.appendChild(this.proSubredditManagerSaveButton);
-		
+
 		this.proSaveCommentsGetButton = createElementWithID('div','RESProGetSavedComments');
 		this.proSaveCommentsGetButton.setAttribute('class','RESButton');
 		this.proSaveCommentsGetButton.innerHTML = 'Get saved comments from Server';
@@ -3670,7 +3662,7 @@ var RESConsole = {
 			modules['RESPro'].authenticate(modules['RESPro'].getModuleData('subredditManager'));
 		}, false);
 		RESConsoleProPanel.appendChild(this.proSubredditManagerGetButton);
-		
+
 		this.proGetButton = createElementWithID('div','RESProGet');
 		this.proGetButton.setAttribute('class','RESButton');
 		this.proGetButton.innerHTML = 'Get options from Server';
@@ -3774,7 +3766,6 @@ var RESConsole = {
 	}
 };
 
-
 /************************************************************************************************************
 
 Creating your own module:
@@ -3795,7 +3786,7 @@ modules['myModule'] = {
 	category: 'CategoryName',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		defaultMessage: {
@@ -3829,7 +3820,6 @@ modules['myModule'] = {
 }; // note: you NEED this semicolon at the end!
 
 ************************************************************************************************************/
-
 
 modules['subRedditTagger'] = {
 	moduleID: 'subRedditTagger',
@@ -3873,14 +3863,14 @@ modules['subRedditTagger'] = {
 			this.SRTDoesntContain = [];
 			this.SRTTagWith = [];
 			this.loadSRTRules();
-			
+
 			document.body.addEventListener('DOMNodeInserted', function(event) {
 				if ((event.target.tagName == 'DIV') && (event.target.getAttribute('id') && event.target.getAttribute('id').indexOf('siteTable') != -1)) {
 					modules['subRedditTagger'].scanTitles(event.target);
 				}
 			}, true);
 			this.scanTitles();
-			
+
 		}
 	},
 	loadSRTRules: function () {
@@ -3936,8 +3926,7 @@ modules['subRedditTagger'] = {
 		}
 	}
 
-}; 
-
+};
 
 modules['uppersAndDowners'] = {
 	moduleID: 'uppersAndDowners',
@@ -4026,7 +4015,7 @@ modules['uppersAndDowners'] = {
 						}
 					}
 				}, true);
-				
+
 			}
 		}
 	},
@@ -4085,13 +4074,13 @@ modules['uppersAndDowners'] = {
 					modules['uppersAndDowners'].applyUppersAndDownersToComments(thisHREF);
 				}
 			}
-		}			
+		}
 	},
 	applyUppersAndDownersToComments: function(href) {
 		/*
 			The Reddit Uppers/Downers module is included as a convenience, but I did not write it.
 			Original credits are below.
-			
+
 			I have, however, greatly modified it to integrate better with RES and also add some configuration options.
 		*/
 		/*
@@ -4113,7 +4102,7 @@ modules['uppersAndDowners'] = {
 				savetheclocktower - http://gist.github.com/174069
 				skeww (jslint, fragment, chunking) - http://kaioa.com
 		*/
-		
+
 		var loc, jsonURL, voteTable, onloadJSON, displayVotes, processTree, isComment, processChildren, processReplies, chunker;
 
 		//Get the URL for the JSON details of this comments page
@@ -4190,7 +4179,7 @@ modules['uppersAndDowners'] = {
 							frag = document.createDocumentFragment(); //using a fragment speeds this up by a factor of about 2
 
 							votes = voteTable[commentID];
-							
+
 							if (modules['uppersAndDowners'].options.showSigns.value) {
 								votes.ups = '+'+votes.ups;
 								votes.downs = '-'+votes.downs;
@@ -4228,9 +4217,9 @@ modules['uppersAndDowners'] = {
 
 							item.appendChild(frag);
 						}
-					}				
+					}
 				}
-				
+
 			});
 		};
 
@@ -4343,7 +4332,7 @@ modules['uppersAndDowners'] = {
 							displayType = 'compressed';
 							var thisSelector = thisClass + ' p.tagline span.likes';
 							var thisTagline = document.body.querySelector(thisSelector);
-						} 
+						}
 					} else if (displayType == 'regular') {
 						var thisSelector = thisClass + ' p.tagline';
 						var thisTagline = document.body.querySelector(thisSelector);
@@ -4372,7 +4361,7 @@ modules['uppersAndDowners'] = {
 				onload:	onloadJSONLinks
 			});
 		}, 200);
-		
+
 	}
 };
 
@@ -4382,27 +4371,27 @@ modules['keyboardNav'] = {
 	category: 'UI',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		focusBorder: {
 			type: 'text',
-			value: '1px dashed #888888', 
+			value: '1px dashed #888888',
 			description: 'Border style of focused element'
 		},
 		focusBGColor: {
 			type: 'text',
-			value: '#F0F3FC', 
+			value: '#F0F3FC',
 			description: 'Background color of focused element'
 		},
 		focusBGColorNight: {
 			type: 'text',
-			value: '#666', 
+			value: '#666',
 			description: 'Background color of focused element in Night Mode'
  		},
  		focusFGColorNight: {
 			type: 'text',
-			value: '#DDD', 
+			value: '#DDD',
 			description: 'Foreground color of focused element in Night Mode'
  		},
 		autoSelectOnScroll: {
@@ -4775,7 +4764,7 @@ modules['keyboardNav'] = {
 		this.commandLineForm.addEventListener('submit', modules['keyboardNav'].cmdLineSubmit, false);
 		this.commandLineWidget.appendChild(this.commandLineForm);
 		document.body.appendChild(this.commandLineWidget);
-		
+
 	},
 	cmdLineHelper: function (val) {
 		var splitWords = val.split(' ');
@@ -4863,7 +4852,7 @@ modules['keyboardNav'] = {
 		if (theInput.indexOf('r/') != -1) {
 			// subreddit? (r/subreddit or /r/subreddit)
 			theInput = theInput.replace('/r/','').replace('r/','');
-			location.href = '/r/'+theInput;		
+			location.href = '/r/'+theInput;
 		} else if (theInput.indexOf('/') == 0) {
 			// sort...
 			theInput = theInput.slice(1);
@@ -5516,7 +5505,7 @@ modules['keyboardNav'] = {
 			if ((!(RESUtils.elementInViewport(this.keyboardLinks[this.activeIndex]))) || (this.options.scrollStyle.value == 'top')) {
 				RESUtils.scrollTo(0,thisXY.y);
 			}
-			
+
 			modules['keyboardNav'].recentKey();
 		}
 	},
@@ -5859,7 +5848,7 @@ modules['keyboardNav'] = {
 			}
 		}
 	}
-}; 
+};
 
 // user tagger functions
 modules['userTagger'] = {
@@ -5929,7 +5918,7 @@ modules['userTagger'] = {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// get this module's options...
 			// RESUtils.getOptions(this.moduleID);
-			
+
 			// Get user tag data...
 			var tags = RESStorage.getItem('RESmodules.userTagger.tags');
 			this.tags = null;
@@ -6046,7 +6035,7 @@ modules['userTagger'] = {
 									modules['userTagger'].colorUser(thisVWobj, thisAuthor, votes);
 								}
 							}
-							
+
 						}, true);
 					}
 				}
@@ -6079,9 +6068,9 @@ modules['userTagger'] = {
 			css += '#userTaggerPreview { float: left; height: 16px; margin-bottom: 10px; }';
 			css += '#userTaggerToolTip .toggleButton .toggleOn { background-color: #107ac4; color: #ffffff;  }';
 			css += '#userTaggerToolTip .toggleButton.enabled .toggleOn { background-color: #dddddd ; color: #636363; }';
-			css += '#userTaggerToolTip .toggleButton.enabled .toggleOff { background-color: #d02020; color: #ffffff; }'; 
+			css += '#userTaggerToolTip .toggleButton.enabled .toggleOff { background-color: #d02020; color: #ffffff; }';
 			css += '#userTaggerToolTip .toggleButton .toggleOff { background-color: #dddddd; color: #636363; } ';
-			
+
 			RESUtils.addCSS(css);
 			this.userTaggerToolTip = createElementWithID('div','userTaggerToolTip', 'RESDialogSmall');
 			thisHTML = '<h3>Tag User</h3><div id="userTaggerToolTipContents" class="RESDialogContents clear">';
@@ -6346,7 +6335,7 @@ modules['userTagger'] = {
 			if (modules['userTagger'].authori < modules['userTagger'].authorCount) {
 				setTimeout(arguments.callee, 1000);
 			}
-		})();		
+		})();
 	},
 	applyTagToAuthor: function(thisAuthorObj) {
 		var userObject = [];
@@ -6391,9 +6380,9 @@ modules['userTagger'] = {
 					votes: thisVotes
 				}
 			}
-			
+
 			var userTagFrag = document.createDocumentFragment();
-			
+
 			var userTagLink = document.createElement('a');
 			if (!(thisTag)) {
 				thisTag = '<div class="RESUserTagImage"></div>';
@@ -6591,7 +6580,7 @@ modules['userTagger'] = {
 			thisLink = modules['userTagger'].tags[thisName].link || '';
 			thisVotes = modules['userTagger'].tags[thisName].votes || 0;
 			thisTag = modules['userTagger'].tags[thisName].tag || '';
-		} 
+		}
 		if ((thisIgnore) && (thisTag == '')) {
 			thisTag = 'ignored';
 		} else if ((!thisIgnore) && (thisTag == 'ignored')) {
@@ -6689,7 +6678,7 @@ modules['betteReddit'] = {
 			value: true,
 			description: 'Show lengths of videos when possible'
 		},
-		toolbarFix: { 
+		toolbarFix: {
 			type: 'boolean',
 			value: true,
 			description: 'Don\'t use Reddit Toolbar when linking to sites that may not function (twitter, youtube and others)'
@@ -6728,7 +6717,7 @@ modules['betteReddit'] = {
 			// get this module's options...
 			// RESUtils.getOptions(this.moduleID);
 
-			if ((this.options.toolbarFix.value) && ((RESUtils.pageType() == 'linklist') || RESUtils.pageType() == 'comments')) { 
+			if ((this.options.toolbarFix.value) && ((RESUtils.pageType() == 'linklist') || RESUtils.pageType() == 'comments')) {
 				this.toolbarFix();
 			}
 			// if (((RESUtils.pageType() == 'inbox') || (RESUtils.pageType() == 'profile') || ((RESUtils.pageType() == 'comments') && (RESUtils.currentSubreddit('friends')))) && (this.options.fullCommentsLink.value)) {
@@ -7287,7 +7276,6 @@ modules['singleClick'] = {
 		return RESUtils.isMatchURL(this.moduleID);
 	},
 	isURLMatch: function() {
-
 	},
 	include: Array(
 		/https?:\/\/([a-z]+).reddit.com\/[\?]*/i,
@@ -7340,7 +7328,7 @@ modules['singleClick'] = {
 					}
 					singleClickLI.appendChild(singleClickLink);
 					thisUL.appendChild(singleClickLI);
-					// we have to switch to mousedown because Webkit is being a douche and not triggering click events on middle click.  
+					// we have to switch to mousedown because Webkit is being a douche and not triggering click events on middle click.
 					// ?? We should still preventDefault on a click though, maybe?
 					singleClickLink.addEventListener('mousedown', function(e) {
 						e.preventDefault();
@@ -7350,7 +7338,7 @@ modules['singleClick'] = {
 							if (typeof(chrome) != 'undefined') {
 								thisJSON = {
 									requestType: 'singleClick',
-									linkURL: this.getAttribute('thisLink'), 
+									linkURL: this.getAttribute('thisLink'),
 									openOrder: modules['singleClick'].options.openOrder.value,
 									commentsURL: this.getAttribute('thisComments'),
 									button: e.button,
@@ -7363,7 +7351,7 @@ modules['singleClick'] = {
 							} else if (typeof(safari) != 'undefined') {
 								thisJSON = {
 									requestType: 'singleClick',
-									linkURL: this.getAttribute('thisLink'), 
+									linkURL: this.getAttribute('thisLink'),
 									openOrder: modules['singleClick'].options.openOrder.value,
 									commentsURL: this.getAttribute('thisComments'),
 									button: e.button,
@@ -7373,7 +7361,7 @@ modules['singleClick'] = {
 							} else if (typeof(opera) != 'undefined') {
 								thisJSON = {
 									requestType: 'singleClick',
-									linkURL: this.getAttribute('thisLink'), 
+									linkURL: this.getAttribute('thisLink'),
 									openOrder: modules['singleClick'].options.openOrder.value,
 									commentsURL: this.getAttribute('thisComments'),
 									button: e.button,
@@ -7383,7 +7371,7 @@ modules['singleClick'] = {
 							} else if (typeof(self.on) == 'function') {
 								thisJSON = {
 									requestType: 'singleClick',
-									linkURL: this.getAttribute('thisLink'), 
+									linkURL: this.getAttribute('thisLink'),
 									openOrder: modules['singleClick'].options.openOrder.value,
 									commentsURL: this.getAttribute('thisComments'),
 									button: e.button,
@@ -7447,7 +7435,6 @@ modules['commentPreview'] = {
 	},
 	go: function() {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
-
 			RESUtils.addCSS('.markdownEditor { white-space: nowrap;  }');
 			RESUtils.addCSS('.markdownEditor a { margin-right: 8px; text-decoration: none; font-size: 11px; }');
 			/*
@@ -7463,17 +7450,16 @@ modules['commentPreview'] = {
 			RESUtils.addCSS('.RESDialogSmall.livePreview { position: relative; width: auto; margin-bottom: 15px; }');
 			RESUtils.addCSS('.RESDialogSmall.livePreview .RESDialogContents h3 { font-weight: bold; }');
 
-			
 			if (this.options.subredditAutocomplete.value) this.subredditAutocomplete();
-			
+
 			/*
 			2009-08-30
 				- Fixed top comment box.
 				- Added markdown toolbar.
-				
+
 			2009-02-05
 				- Fixed the preview clearing after clicking "comment". That was broken, too.
-				
+
 			2009-02-04
 				- Fix because reddit broke it.
 			*/
@@ -7525,7 +7511,6 @@ modules['commentPreview'] = {
 			// and line endings.
 			//
 
-
 			//
 			// Showdown usage:
 			//
@@ -7540,7 +7525,6 @@ modules['commentPreview'] = {
 			// file before uncommenting it.
 			//
 
-
 			//
 			// Showdown namespace
 			//
@@ -7553,7 +7537,6 @@ modules['commentPreview'] = {
 			// exposed is makeHtml().
 			//
 			Showdown.converter = function() {
-
 			//
 			// Globals:
 			//
@@ -7566,7 +7549,6 @@ modules['commentPreview'] = {
 			// Used to track when we're inside an ordered or unordered list
 			// (see _ProcessListItems() for details):
 			var g_list_level = 0;
-
 
 			this.makeHtml = function(text) {
 			//
@@ -7585,7 +7567,7 @@ modules['commentPreview'] = {
 				g_html_blocks = [];
 
 				// Replace < with &lt; and > with &gt;
-				// COMMENTING TO TEST PATCH FROM: 
+				// COMMENTING TO TEST PATCH FROM:
 				// https://pay.reddit.com/r/Enhancement/comments/fo55a/bug_live_comment_preview_and_reddit_interpret/c1jgpi0?context=3
 				// text = text.replace(/</g,"&lt;");
 				text = text.replace(/>/g,"&gt;");
@@ -7640,7 +7622,6 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var _StripLinkDefinitions = function(text) {
 			//
 			// Strips link definitions from text, stores the URLs and titles in
@@ -7681,7 +7662,7 @@ modules['commentPreview'] = {
 						} else if (m4) {
 							g_titles[m1] = m4.replace(/"/g,"&quot;");
 						}
-						
+
 						// Completely remove the definition from the text
 						return "";
 					}
@@ -7689,7 +7670,6 @@ modules['commentPreview'] = {
 
 				return text;
 			}
-
 
 			var _HashHTMLBlocks = function(text) {
 				// attacklab: Double up blank lines to reduce lookaround
@@ -7754,7 +7734,7 @@ modules['commentPreview'] = {
 				text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math)\b[^\r]*?.*<\/\2>[ \t]*(?=\n+)\n)/gm,hashElement);
 
 				// Special case just for <hr />. It was easier to make a special case than
-				// to make the other regex more complicated.  
+				// to make the other regex more complicated.
 
 				/*
 					text = text.replace(/
@@ -7763,7 +7743,7 @@ modules['commentPreview'] = {
 						[ ]{0,3}
 						(<(hr)				// start tag = $2
 						\b					// word break
-						([^<>])*?			// 
+						([^<>])*?			//
 						\/?>)				// the matching end tag
 						[ \t]*
 						(?=\n{2,})			// followed by a blank line
@@ -7821,13 +7801,13 @@ modules['commentPreview'] = {
 				// Undo double lines
 				blockText = blockText.replace(/\n\n/g,"\n");
 				blockText = blockText.replace(/^\n/,"");
-				
+
 				// strip trailing blank lines
 				blockText = blockText.replace(/\n+$/g,"");
-				
+
 				// Replace the element text with a marker ("~KxK" where x is its key)
 				blockText = "\n\n~K" + (g_html_blocks.push(blockText)-1) + "K\n\n";
-				
+
 				return blockText;
 			};
 
@@ -7857,7 +7837,6 @@ modules['commentPreview'] = {
 
 				return text;
 			}
-
 
 			var _RunSpanGamut = function(text) {
 			//
@@ -7894,7 +7873,7 @@ modules['commentPreview'] = {
 			// don't conflict with their use in Markdown for code, italics and strong.
 			//
 
-				// Build a regex to find HTML tags and comments.  See Friedl's 
+				// Build a regex to find HTML tags and comments.  See Friedl's
 				// "Mastering Regular Expressions", 2nd Ed., pp. 200-201.
 				var regex = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
 
@@ -8001,14 +7980,14 @@ modules['commentPreview'] = {
 				var link_id	 = m3.toLowerCase();
 				var url		= m4;
 				var title	= m7;
-				
+
 				if (url == "") {
 					if (link_id == "") {
 						// lower-case and turn embedded newlines into spaces
 						link_id = link_text.toLowerCase().replace(/ ?\n/g," ");
 					}
 					url = "#"+link_id;
-					
+
 					if (g_urls[link_id] != undefined) {
 						url = g_urls[link_id];
 						if (g_titles[link_id] != undefined) {
@@ -8023,21 +8002,20 @@ modules['commentPreview'] = {
 							return whole_match;
 						}
 					}
-				}	
+				}
 				url = escapeCharacters(url,"*_");
 				var result = "<a href=\"" + url + "\"";
-				
+
 				if (title != "") {
 					title = title.replace(/"/g,"&quot;");
 					title = escapeCharacters(title,"*_");
 					result +=  " title=\"" + title + "\"";
 				}
-				
+
 				result += ">" + link_text + "</a>";
-				
+
 				return result;
 			}
-
 
 			var _DoImages = function(text) {
 			//
@@ -8105,14 +8083,14 @@ modules['commentPreview'] = {
 				var title	= m7;
 
 				if (!title) title = "";
-				
+
 				if (url == "") {
 					if (link_id == "") {
 						// lower-case and turn embedded newlines into spaces
 						link_id = alt_text.toLowerCase().replace(/ ?\n/g," ");
 					}
 					url = "#"+link_id;
-					
+
 					if (g_urls[link_id] != undefined) {
 						url = g_urls[link_id];
 						if (g_titles[link_id] != undefined) {
@@ -8122,8 +8100,8 @@ modules['commentPreview'] = {
 					else {
 						return whole_match;
 					}
-				}	
-				
+				}
+
 				alt_text = alt_text.replace(/"/g,"&quot;");
 				url = escapeCharacters(url,"*_");
 				var result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
@@ -8136,19 +8114,17 @@ modules['commentPreview'] = {
 					title = escapeCharacters(title,"*_");
 					result +=  " title=\"" + title + "\"";
 				//}
-				
+
 				result += " />";
-				
+
 				return result;
 			}
 
-
 			var _DoHeaders = function(text) {
-
 				// Setext-style headers:
 				//	Header 1
 				//	========
-				//  
+				//
 				//	Header 2
 				//	--------
 				//
@@ -8232,7 +8208,7 @@ modules['commentPreview'] = {
 						// paragraph for the last item in a list, if necessary:
 						list = list.replace(/\n{2,}/g,"\n\n\n");;
 						var result = _ProcessListItems(list);
-				
+
 						// Trim any trailing whitespace, to put the closing `</$list_type>`
 						// up on the preceding line, to get it past the current stupid
 						// HTML block parser. This is a hack to work around the terrible
@@ -8252,7 +8228,7 @@ modules['commentPreview'] = {
 						// paragraph for the last item in a list, if necessary:
 						var list = list.replace(/\n{2,}/g,"\n\n\n");;
 						var result = _ProcessListItems(list);
-						result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";	
+						result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";
 						return result;
 					});
 				}
@@ -8334,11 +8310,10 @@ modules['commentPreview'] = {
 				return list_str;
 			}
 
-
 			var _DoCodeBlocks = function(text) {
 			//
 			//  Process Markdown `<pre><code>` blocks.
-			//  
+			//
 
 				/*
 					text = text.replace(text,
@@ -8355,13 +8330,13 @@ modules['commentPreview'] = {
 
 				// attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
 				text += "~0";
-				
+
 				// text = text.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
 				text = text.replace(/(?:\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
 					function(wholeMatch,m1,m2) {
 						var codeblock = m1;
 						var nextChar = m2;
-					
+
 						codeblock = _EncodeCode( _Outdent(codeblock));
 						codeblock = _Detab(codeblock);
 						codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
@@ -8384,30 +8359,29 @@ modules['commentPreview'] = {
 				return "\n\n~K" + (g_html_blocks.push(text)-1) + "K\n\n";
 			}
 
-
 			var _DoCodeSpans = function(text) {
 			//
 			//   *  Backtick quotes are used for <code></code> spans.
-			// 
+			//
 			//   *  You can use multiple backticks as the delimiters if you want to
 			//	 include literal backticks in the code span. So, this input:
-			//	 
+			//
 			//		 Just type ``foo `bar` baz`` at the prompt.
-			//	 
+			//
 			//	   Will translate to:
-			//	 
+			//
 			//		 <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
-			//	 
+			//
 			//	There's no arbitrary limit to the number of backticks you
 			//	can use as delimters. If you need three consecutive backticks
 			//	in your code, use four for delimiters, etc.
 			//
 			//  *  You can use spaces to get literal backticks at the edges:
-			//	 
+			//
 			//		 ... type `` `bar` `` ...
-			//	 
+			//
 			//	   Turns to:
-			//	 
+			//
 			//		 ... type <code>`bar`</code> ...
 			//
 
@@ -8436,7 +8410,6 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var _EncodeCode = function(text) {
 			//
 			// Encode/escape certain characters inside Markdown code runs.
@@ -8445,12 +8418,12 @@ modules['commentPreview'] = {
 			//
 				// Encode all ampersands; HTML entities are not
 				// entities within a Markdown code span.
-				// COMMENTING TO TEST PATCH FROM: 
+				// COMMENTING TO TEST PATCH FROM:
 				// https://pay.reddit.com/r/Enhancement/comments/fo55a/bug_live_comment_preview_and_reddit_interpret/c1jgpi0?context=3
 				// text = text.replace(/&/g,"&amp;");
 
 				// Do the angle bracket song and dance:
-				// COMMENTING TO TEST PATCH FROM: 
+				// COMMENTING TO TEST PATCH FROM:
 				// https://pay.reddit.com/r/Enhancement/comments/fo55a/bug_live_comment_preview_and_reddit_interpret/c1jgpi0?context=3
 				// text = text.replace(/</g,"&lt;");
 				// text = text.replace(/>/g,"&gt;");
@@ -8471,11 +8444,10 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var _DoItalicsAndBoldAndStrike = function(text) {
 				text = text.replace(/(?:^|[^\S])(~~)((?:.+)(?:(?:\n.+)+)?)\1/g,
 					" <del>$2</del>");
-					
+
 				// <strong> must go first:
 				// text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
 				// text = text.replace(/(^|[^\S])(\*\*|__)(.+)\n?(.*)\2/g,
@@ -8491,7 +8463,7 @@ modules['commentPreview'] = {
 					"<em>$2</em>");
 				text = text.replace(/(?:^|[^\S])(_)((?:.+)(?:(?:\n.*)+)?)\1/g,
 					" <em>$2</em>");
-					
+
 				return text;
 			}
 
@@ -8555,7 +8527,7 @@ modules['commentPreview'] = {
 									}
 								}
 								thisTableHTML += '</tbody></table>';
-								
+
 								// text = text.replace(/[^\n\r]+(?:\|[^\n\r]+)+\n--(?:\|--)+\n(?:[^\n\r]+(\|[^\n\r]+)+\n)+/,
 								text = text.replace(/[^\n\r]+(?:\|[^\n\r]+)+\n(:?[-]{2,}:?)(\|:?[-]{2,}:?)+\n(?:[^\n\r]+(\|[^\n\r]+)+\n)+/,
 									thisTableHTML);
@@ -8566,9 +8538,7 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var _DoBlockQuotes = function(text) {
-
 				/*
 					text = text.replace(/
 					(								// Wrap whole match in $1
@@ -8596,7 +8566,7 @@ modules['commentPreview'] = {
 
 						bq = bq.replace(/^[ \t]+$/gm,"");		// trim whitespace-only lines
 						bq = _RunBlockGamut(bq);				// recurse
-						
+
 						bq = bq.replace(/(^|\n)/g,"$1  ");
 						// These leading spaces screw with <pre> content, so we need to fix that:
 						bq = bq.replace(
@@ -8608,12 +8578,11 @@ modules['commentPreview'] = {
 								pre = pre.replace(/~0/g,"");
 								return pre;
 							});
-						
+
 						return hashBlock("<blockquote>\n" + bq + "\n</blockquote>");
 					});
 				return text;
 			}
-
 
 			var _FormParagraphs = function(text) {
 			//
@@ -8664,20 +8633,18 @@ modules['commentPreview'] = {
 				return grafsOut.join("\n\n");
 			}
 
-
 			var _EncodeAmpsAndAngles = function(text) {
 			// Smart processing for ampersands and angle brackets that need to be encoded.
-				
+
 				// Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
 				//   http://bumppo.net/projects/amputator/
 				text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g,"&amp;");
-				
+
 				// Encode naked <'s
 				text = text.replace(/<(?![a-z\/?\$!])/gi,"&lt;");
-				
+
 				return text;
 			}
-
 
 			var _EncodeBackslashEscapes = function(text) {
 			//
@@ -8700,9 +8667,7 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var _DoAutoLinks = function(text) {
-
 				text = text.replace(/<((https?|ftp|dict):[^'">\s]+)>/gi,"<a href=\"$1\">$1</a>");
 
 				// Email addresses: <address@domain.foo>
@@ -8719,7 +8684,7 @@ modules['commentPreview'] = {
 						>
 					/gi, _DoAutoLinks_callback());
 				*/
-				
+
 				text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
 					function(wholeMatch,m1) {
 						return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
@@ -8728,7 +8693,6 @@ modules['commentPreview'] = {
 
 				return text;
 			}
-
 
 			var _EncodeEmailAddress = function(addr) {
 			//
@@ -8784,7 +8748,6 @@ modules['commentPreview'] = {
 				return addr;
 			}
 
-
 			var _UnescapeSpecialChars = function(text) {
 			//
 			// Swap back in all the special characters we've hidden.
@@ -8797,7 +8760,6 @@ modules['commentPreview'] = {
 				);
 				return text;
 			}
-
 
 			var _Outdent = function(text) {
 			//
@@ -8847,11 +8809,9 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			//
 			//  attacklab: Utility functions
 			//
-
 
 			var escapeCharacters = function(text, charsToEscape, afterBackslash) {
 				// First we have to escape the escape characters so that
@@ -8868,7 +8828,6 @@ modules['commentPreview'] = {
 				return text;
 			}
 
-
 			var escapeCharacters_callback = function(wholeMatch,m1) {
 				var charCodeToEscape = m1.charCodeAt(0);
 				return "~E"+charCodeToEscape+"E";
@@ -8876,45 +8835,39 @@ modules['commentPreview'] = {
 
 			} // end of Showdown.converter
 
-
-
-
 			// ###########################################################################
-			// Start user script 
+			// Start user script
 			// ###########################################################################
-
-
 
 			var converter = new Showdown.converter();
 
 			function wireupNewCommentEditors( parent )
-			{	
+			{
 				if (!parent.getElementsByTagName) return;
-				
+
 				if ( parent.tagName == 'FORM' )
-				{		
-					/*HACK: I don't get it! When I click Reply to a comment, a live 
-					preview already exists! Even before our handler for DOMNodeInserted 
-					fires. (I tested this with a timeout.) Plus, the existing live preview 
-					will already contain whatever preview is in the main comment preview 
-					at the time, but it is not linked to the main comment text area, so it 
-					never updates. The crazy thig is, the form for the comment reply 
-					doesn't even exist in the DOM before we click the Reply link. So where 
-					the hell is this preview coming from? I'm just brute-forcing it away 
+				{
+					/*HACK: I don't get it! When I click Reply to a comment, a live
+					preview already exists! Even before our handler for DOMNodeInserted
+					fires. (I tested this with a timeout.) Plus, the existing live preview
+					will already contain whatever preview is in the main comment preview
+					at the time, but it is not linked to the main comment text area, so it
+					never updates. The crazy thig is, the form for the comment reply
+					doesn't even exist in the DOM before we click the Reply link. So where
+					the hell is this preview coming from? I'm just brute-forcing it away
 					for now. Same issue with the editor*/
-					removeExistingPreview( parent );		
+					removeExistingPreview( parent );
 					removeExistingEditor( parent );
-					
-					var preview = addPreviewToParent( parent );	
+
+					var preview = addPreviewToParent( parent );
 					addMarkdownEditorToForm( parent, preview );
 				}
 				else
-				{		
+				{
 					var forms = parent.getElementsByTagName('form');
-					
+
 					for ( var i=0, form=null; form=forms[i]; i++ ) {
-						
-						if ( form.getAttribute('id') && (form.getAttribute('id').match(/^commentreply_./)))	{				
+						if ( form.getAttribute('id') && (form.getAttribute('id').match(/^commentreply_./)))	{
 							var preview = addPreviewToParent(form);
 							addMarkdownEditorToForm( form, preview );
 						} else if (form && form.getAttribute('id') && form.getAttribute('id').match(/^form-./)) {
@@ -8945,10 +8898,10 @@ modules['commentPreview'] = {
 				for ( var i = 0; i < editDivs.snapshotLength; i++)
 				{
 					var editDiv = editDivs.snapshotItem(i);
-					
+
 					var preview = addPreviewToParent( editDiv );
 					addMarkdownEditorToForm( editDiv, preview );
-					
+
 					refreshPreview( preview, preview.textArea )
 				}
 				*/
@@ -8957,15 +8910,15 @@ modules['commentPreview'] = {
 				for ( var i = 0, len=editDivs.length; i < len; i++)
 				{
 					var editDiv = editDivs[i];
-					
+
 					var preview = addPreviewToParent( editDiv );
 					addMarkdownEditorToForm( editDiv, preview );
-					
+
 					refreshPreview( preview, preview.textArea )
 				}
-				
+
 			}
-			
+
 			function wireupViewSourceButtons(ele) {
 				if (ele == null) ele = document;
 				if (RESUtils.pageType() == 'comments') {
@@ -8995,12 +8948,12 @@ modules['commentPreview'] = {
 						}
 						if (modules['commentPreview'].commentMenusi < modules['commentPreview'].commentMenusCount) {
 							setTimeout(arguments.callee, 1000);
-						} 
-					})();		
+						}
+					})();
 				}
 			}
 
-			function addPreviewToParent( parent ) {	
+			function addPreviewToParent( parent ) {
 				/*
 				var set=document.createElement('fieldset');
 				set.setAttribute('class', 'liveComment');
@@ -9017,41 +8970,41 @@ modules['commentPreview'] = {
 				var previewContainer = document.createElement('div');
 				previewContainer.setAttribute('class','RESDialogSmall livePreview');
 				previewContainer.innerHTML = '<h3>Live Preview</h3>';
-				
+
 				var preview = document.createElement('div');
 				preview.setAttribute('class','md RESDialogContents');
 				previewContainer.appendChild(preview);
 
 				// modification: hide this thing until someone types...
 				preview.parentNode.style.display = 'none';
-				
+
 				// parent.appendChild(set);
 				parent.appendChild(previewContainer);
 
 				var textAreas = parent.getElementsByTagName('textarea');
-				
+
 				if ( textAreas[0] )
-				{		
+				{
 					var targetTextArea = textAreas[0];
-				
+
 					var timer=null;
-					
+
 					targetTextArea.addEventListener(
 						'keyup',
 						function(e)
 						{
 							if (timer) clearTimeout(timer);
-							
+
 							timer = setTimeout(
 								function()
 								{
-									refreshPreview( preview, targetTextArea );			
+									refreshPreview( preview, targetTextArea );
 								},
 								100
 							);
 						},
 						false
-					);	
+					);
 
 					targetTextArea.addEventListener(
 						'keydown',
@@ -9061,7 +9014,7 @@ modules['commentPreview'] = {
 								/*
 									text = text.replace(/(?:^|[^\S])(~~)((?:.+)(?:(?:\n.+)+)?)\1/g,
 										" <del>$2</del>");
-										
+
 									// <strong> must go first:
 									// text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
 									// text = text.replace(/(^|[^\S])(\*\*|__)(.+)\n?(.*)\2/g,
@@ -9077,7 +9030,7 @@ modules['commentPreview'] = {
 										"<em>$2</em>");
 									text = text.replace(/(?:^|[^\S])(_)((?:.+)(?:(?:\n.*)+)?)\1/g,
 										" <em>$2</em>");
-								
+
 								*/
 								var toReplace = $(e.target).getSelection().text;
 								switch (String.fromCharCode(e.keyCode)) {
@@ -9112,14 +9065,13 @@ modules['commentPreview'] = {
 							}
 						},
 						false
-					);	
+					);
 
-					
 					preview.textArea = targetTextArea;
-				
+
 					addPreviewClearOnCommentSubmit( parent, preview );
 				}
-				
+
 				return preview;
 			}
 
@@ -9127,9 +9079,9 @@ modules['commentPreview'] = {
 			function removeExistingPreview( parent )
 			{
 				var previews = parent.querySelectorAll('div.livePreview');
-				
+
 				for (var i = 0, preview = null; preview = previews[i]; i++)
-				{		
+				{
 					preview.parentNode.removeChild( preview );
 					break;
 				}
@@ -9139,7 +9091,7 @@ modules['commentPreview'] = {
 			{
 				// var divs = parent.getElementsByTagName('div');
 				var divs = parent.querySelectorAll('.markdownEditor, .commentingAs');
-				
+
 				for (var i = 0, div = null; div = divs[i]; i++)
 				{
 					div.parentNode.removeChild( div );
@@ -9149,21 +9101,21 @@ modules['commentPreview'] = {
 			function addPreviewClearOnCommentSubmit( parent, preview )
 			{
 				var buttons = parent.getElementsByTagName('button');
-				
+
 				for (var i = 0, button = null; button = buttons[i]; i++)
 				{
 					if ( button.getAttribute('class') == "save" )
 					{
 						button.addEventListener(
-							'click', 
+							'click',
 							function()
 							{
 								preview.innerHTML='';
-							}, 
+							},
 							false
 						);
 					}
-				}	
+				}
 			}
 
 			function refreshPreview( preview, targetTextArea )
@@ -9177,15 +9129,14 @@ modules['commentPreview'] = {
 				preview.innerHTML = converter.makeHtml( targetTextArea.value );
 			}
 
-			function addMarkdownEditorToForm( parent, preview ) 
-			{	
+			function addMarkdownEditorToForm( parent, preview )
+			{
 				var textAreas = parent.getElementsByTagName('textarea');
-				
+
 				if ( !textAreas[0] ) return;
-				
+
 				var targetTextArea = textAreas[0];
-				
-				
+
 				var controlBox = document.createElement( 'div' );
 				controlBox.setAttribute('class', 'markdownEditor');
 				parent.insertBefore( controlBox, parent.firstChild );
@@ -9197,7 +9148,7 @@ modules['commentPreview'] = {
 					commentingAs.innerHTML = 'Commenting as: ' + RESUtils.loggedInUser();
 					parent.insertBefore( commentingAs, parent.firstChild );
 				}
-				
+
 				var bold = new EditControl(
 					'<b>Bold</b>',
 					function()
@@ -9207,7 +9158,7 @@ modules['commentPreview'] = {
 					},
 					'ctrl-b'
 				);
-				
+
 				var italics = new EditControl(
 					'<i>Italic</i>',
 					function()
@@ -9217,7 +9168,7 @@ modules['commentPreview'] = {
 					},
 					'ctrl-i'
 				);
-				
+
 				var strikethrough = new EditControl(
 					'<del>strike</del>',
 					function()
@@ -9227,7 +9178,7 @@ modules['commentPreview'] = {
 					},
 					'ctrl-s'
 				);
-				
+
 				var superscript = new EditControl(
 					'<sup>sup</sup>',
 					function()
@@ -9245,7 +9196,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var quote = new EditControl(
 					'|Quote',
 					function()
@@ -9254,7 +9205,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var code = new EditControl(
 					'<span style="font-family: Courier New;">Code</span>',
 					function()
@@ -9263,7 +9214,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var bullets = new EditControl(
 					'&bull;Bullets',
 					function()
@@ -9272,7 +9223,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var numbers = new EditControl(
 					'1.Numbers',
 					function()
@@ -9281,7 +9232,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var disapproval = new EditControl(
 					'&#3232;\_&#3232;',
 					function() {
@@ -9289,7 +9240,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				var promoteRES = new EditControl(
 					'[Promote]',
 					function() {
@@ -9297,7 +9248,7 @@ modules['commentPreview'] = {
 						refreshPreview( preview, targetTextArea );
 					}
 				);
-				
+
 				controlBox.appendChild( bold.create() );
 				controlBox.appendChild( italics.create() );
 				controlBox.appendChild( strikethrough.create() );
@@ -9309,63 +9260,63 @@ modules['commentPreview'] = {
 				controlBox.appendChild( numbers.create() );
 				controlBox.appendChild( disapproval.create() );
 				controlBox.appendChild( promoteRES.create() );
-					
+
 			}
 
 			function EditControl( label, editFunction, shortcutKey )
 			{
-				this.create = function() 
+				this.create = function()
 				{
 					var link = document.createElement('a');
 					if (shortcutKey) link.title = shortcutKey;
 					link.innerHTML = label;
 					link.href = 'javascript:;';
 					// link.setAttribute('style','Margin-Right: 15px; text-decoration: none;');
-					
+
 					link.execute = editFunction;
-					
+
 					addEvent( link, 'click', 'execute' );
-					
-					return link;	
+
+					return link;
 				}
 			}
 
 			function tagSelection( targetTextArea, tagOpen, tagClose, textEscapeFunction )
-			{	
+			{
 				//record scroll top to restore it later.
 				var scrollTop = targetTextArea.scrollTop;
-				
+
 				//We will restore the selection later, so record the current selection.
 				var selectionStart = targetTextArea.selectionStart;
 				var selectionEnd = targetTextArea.selectionEnd;
-				
+
 				var selectedText = targetTextArea.value.substring( selectionStart, selectionEnd );
-				
+
 				//Markdown doesn't like it when you tag a word like **this **. The space messes it up. So we'll account for that because Firefox selects the word, and the followign space when you double click a word.
 				var potentialTrailingSpace = '';
-				
+
 				if( selectedText[ selectedText.length - 1 ] == ' ' )
 				{
 					potentialTrailingSpace = ' ';
 					selectedText = selectedText.substring( 0, selectedText.length - 1 );
 				}
-				
+
 				if ( textEscapeFunction )
 				{
 					selectedText = textEscapeFunction( selectedText );
 				}
-				
-				targetTextArea.value = 
+
+				targetTextArea.value =
 					targetTextArea.value.substring( 0, selectionStart ) + //text leading up to the selection start
-					tagOpen + 
+					tagOpen +
 					selectedText +
-					tagClose + 
+					tagClose +
 					potentialTrailingSpace +
 					targetTextArea.value.substring( selectionEnd ); //text after the selection end
-				
+
 				targetTextArea.selectionStart = selectionStart + tagOpen.length;
 				targetTextArea.selectionEnd = selectionEnd + tagOpen.length;
-				
+
 				targetTextArea.scrollTop = scrollTop;
 			}
 
@@ -9392,25 +9343,25 @@ modules['commentPreview'] = {
 				var scrollTop = targetTextArea.scrollTop;
 				var selectionStart = targetTextArea.selectionStart;
 				var selectionEnd = targetTextArea.selectionEnd;
-				
+
 				var selectedText = targetTextArea.value.substring( selectionStart, selectionEnd );
-				
+
 				var lines = selectedText.split( '\n' );
-				
+
 				var newValue = '';
-				
+
 				for( var i = 0; i < lines.length; i++ )
 				{
 					// newValue += prefix + lines[i] + '\n';
 					newValue += prefix + lines[i];
 					if ( ( i + 1 ) != lines.length ) {newValue += '\n';}
 				}
-				
-				targetTextArea.value = 
+
+				targetTextArea.value =
 					targetTextArea.value.substring( 0, selectionStart ) + //text leading up to the selection start
-					newValue + 
+					newValue +
 					targetTextArea.value.substring( selectionEnd ); //text after the selection end
-				
+
 				targetTextArea.scrollTop = scrollTop;
 			}
 
@@ -9422,10 +9373,9 @@ modules['commentPreview'] = {
 
 			// Bootstrap with the top-level comment always in the page, and editors for your existing comments.
 			wireupExistingCommentEditors();
-			
+
 			// Add "view source" buttons
 			wireupViewSourceButtons(document);
-			
 
 			// Watch for any future 'reply' forms, or stuff loaded in via "load more comments"...
 			document.body.addEventListener(
@@ -9460,7 +9410,7 @@ modules['commentPreview'] = {
 					jsonURL += '/.json';
 					this.viewSourceEle = ele;
 					this.viewSourceLink = sourceLink;
-					
+
 					GM_xmlhttpRequest({
 						method:	"GET",
 						url:	jsonURL,
@@ -9482,7 +9432,7 @@ modules['commentPreview'] = {
 						}
 					});
 				}
-				
+
 			}
 		}
 	},
@@ -9553,11 +9503,10 @@ modules['commentPreview'] = {
 						modules['commentPreview'].subredditAutocompleteDropdownSetNav(0);
 					},
 				"json");
-			
+
 			}, 200);
 
-
-		$(this).blur( modules['commentPreview'].hideSubredditAutocompleteDropdown );	
+		$(this).blur( modules['commentPreview'].hideSubredditAutocompleteDropdown );
 	},
 	subredditAutocompleteNav: function(event) {
 		if ($("#subreddit_dropdown").is(':visible')) {
@@ -9617,7 +9566,7 @@ modules['commentPreview'] = {
 		modules['commentPreview'].subredditAutocompleteDropdown.show();
 		if (typeof(modules['commentPreview'].subredditAutocompleteDropdownNavidx) == 'undefined') modules['commentPreview'].subredditAutocompleteDropdownNavidx = 0;
 		modules['commentPreview'].subredditAutocompleteDropdownSetNav(modules['commentPreview'].subredditAutocompleteDropdownNavidx);
-	
+
 	},
 	updateSubredditAutocompleteTextarea: function(event) {
 		modules['commentPreview'].hideSubredditAutocompleteDropdown();
@@ -9634,7 +9583,7 @@ modules['commentPreview'] = {
 		textarea.value	= beforeCaret + afterCaret;
 		textarea.selectionStart	= textarea.selectionEnd	= beforeCaret.length;
 		textarea.focus()
-	
+
 	}
 };
 
@@ -9740,7 +9689,12 @@ modules['showImages'] = {
 			type: 'boolean',
 			value: true,
 			description: 'Mark links visited when you view images (does eat some resources).'
-		}
+		},
+    ignoreDuplicates: {
+      type: 'boolean',
+      value: false,
+      description: 'Ignore duplicate images, providing an anchor link back to the original.'
+    }
 	},
 	description: 'Opens images inline in your browser with the click of a button. Also has configuration options, check it out!',
 	isEnabled: function() {
@@ -9760,7 +9714,7 @@ modules['showImages'] = {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// get this module's options...
 			// RESUtils.getOptions(this.moduleID);
-			
+
 			// Show Images - source originally from Richard Lainchbury - http://userscripts.org/scripts/show/67729
 			// Source modified to work as a module in RES, and improved slightly..
 			// RESUtils.addCSS(".expando-button.image { float: left; width: 23px; height: 23px; max-width: 23px; max-height: 23px; display: inline-block; background-image: url('http://f.thumbs.redditmedia.com/ykyGgtUvyXldPc3A.png'); margin-right: 6px; cursor: pointer;  padding: 0px; }");
@@ -9779,8 +9733,7 @@ modules['showImages'] = {
 			// potential fix for sidebar overlapping expanded images, but only helps partially...
 			// now that drag hides sidebar, removing this css. 4.0.2
 			// RESUtils.addCSS(".md { max-width: 100% !important;}");
-			
-			
+
 			this.imageList = [];
 			this.imagesRevealed = [];
 			this.flickrImages = [];
@@ -9819,13 +9772,12 @@ modules['showImages'] = {
 					}
 				}
 			}, true);
-			
+
 			// create a div for the thumbnail tooltip...
 			RESUtils.addCSS('#RESThumbnailToolTip { display: none; position: absolute; border: 2px solid gray; z-index: 9999; }');
 			modules['showImages'].toolTip = createElementWithID('div','RESThumbnailToolTip');
 			document.body.appendChild(modules['showImages'].toolTip);
-			
-			
+
 			// this.imguReddit();
 			this.createImageButtons();
 			this.findAllImages();
@@ -9847,9 +9799,8 @@ modules['showImages'] = {
 		} else {
 			var mainmenuUL = document.body.querySelector('#header-bottom-left ul.tabmenu');
 		}
-		
-		if (mainmenuUL) {
 
+		if (mainmenuUL) {
 			var li = document.createElement('li');
 			var a = document.createElement('a');
 			var text = document.createTextNode('scanning for images...');
@@ -9899,7 +9850,7 @@ modules['showImages'] = {
 				mainmenuUL.appendChild(li);
 			}
 		}
-	
+
 	},
 	updateImageButtons: function(imgCount) {
 		if ((typeof(this.viewButton) != 'undefined')) {
@@ -10006,7 +9957,7 @@ modules['showImages'] = {
 					modules['showImages'].scanningForImages = false;
 					modules['showImages'].updateImageButtons(modules['showImages'].imageList.length);
 				}
-			})();		
+			})();
 		} else {
 			var chunkLength = modules['showImages'].allElementsCount;
 			for (var i=0;i<chunkLength;i++) {
@@ -10030,11 +9981,8 @@ modules['showImages'] = {
 				if (hasClass(thingObj,'over18')) NSFW = true;
 			}
 		}
-		// the this.scanningSelfText variable is set as true when we're scanning newly loaded selfText via an expando...
-		// this is done so that we do not do the RES ignored duplicate image thing, because when you close a selfText expando,
-		// reddit completely deletes it from the DOM instead of just hiding it, so re-opening it causes a total rescan.
-		if (((!(hasClass(ele,'imgScanned'))) && (typeof(this.imagesRevealed[href]) == 'undefined') && (href != null)) || this.scanningSelfText) {
-			addClass(ele,'imgScanned');
+
+    if(!this.options.ignoreDuplicates.value || (!hasClass(ele,'imgScanned') && typeof(this.imagesRevealed[href]) == 'undefined' && href != null) || this.scanningSelfText) {
 			this.dupeAnchors++;
 			var isImgur = (checkhref.indexOf('imgur.com')>=0);
 			var isEhost = (checkhref.indexOf('eho.st')>=0);
@@ -10044,7 +9992,9 @@ modules['showImages'] = {
 			var isMinus = ((checkhref.indexOf('min.us')>=0) && (checkhref.indexOf('blog.') == -1));
 			var isQkme = (checkhref.indexOf('qkme.me')>=0) || (checkhref.indexOf('quickmeme.com')>=0);
 			var isGifSound = (checkhref.indexOf('gifsound.com')>=0);
-			if (!(ele.getAttribute('scanned') == 'true') && (checkhref.indexOf('wikipedia.org/wiki') < 0) && (!isGifSound) && (!NSFW) && (!isPhotobucket) && (isImgur || isEhost || isSnaggy || isFlickr || isMinus || isQkme || checkhref.indexOf('.jpeg')>=0 || checkhref.indexOf('.jpg')>=0 || checkhref.indexOf('.gif')>=0 || checkhref.indexOf('.png')>=0)) {
+
+			if (!(ele.getAttribute('scanned') == 'true') && (checkhref.indexOf('wikipedia.org/wiki') < 0) && (!isGifSound) && (!NSFW) && (!isPhotobucket) && (isImgur || isEhost || isSnaggy || isFlickr || isMinus || isQkme || checkhref.indexOf('.jpeg')>=0 || checkhref.indexOf('.jpg')>=0 || checkhref.indexOf('.gif')>=0 || checkhref.indexOf('.png')>=0))
+      {
 				if (isImgur) {
 					// if it's not a full (direct) imgur link, get the relevant data and append it... otherwise, go now!
 					// first, kill any URL parameters that screw with the parser, like ?full.
@@ -10052,7 +10002,7 @@ modules['showImages'] = {
 					href = splithref[0];
 					var orighref = href;
 					/*
-					if ((this.options.imageSize.value != null) && (this.options.imageSize.value != '')) { 
+					if ((this.options.imageSize.value != null) && (this.options.imageSize.value != '')) {
 						splithref = href.split('.');
 						if ((splithref[splithref.length-1] == 'jpg') || (splithref[splithref.length-1] == 'jpeg') || (splithref[splithref.length-1] == 'png') || (splithref[splithref.length-1] == 'gif'))  {
 							splithref[splithref.length-2] += this.options.imageSize.value;
@@ -10070,8 +10020,8 @@ modules['showImages'] = {
 						if (typeof(this.imgurCalls[apiURL]) == 'undefined') {
 							// store the object we want to modify when the json request is finished...
 							this.imgurCalls[apiURL] = ele;
-							GM_xmlhttpRequest({ 
-								method: 'GET', 
+							GM_xmlhttpRequest({
+								method: 'GET',
 								url: apiURL,
 								onload: function(response) {
 									try {
@@ -10089,7 +10039,7 @@ modules['showImages'] = {
 								}
 							});
 						}
-					} 
+					}
 					if (groups) this.createImageExpando(ele);
 				} else if (isEhost) {
 					if (href.substr(-1) != '+') {
@@ -10112,7 +10062,7 @@ modules['showImages'] = {
 					var ext = '';
 					if (getExt.length > 1) {
 						ext = getExt[getExt.length-1].toLowerCase();
-					} 
+					}
 					if ((ext != 'jpg') && (ext != 'jpeg') && (ext != 'gif') && (ext != 'png')) {
 						var orighref = href;
 						var groups = this.minusHashRe.exec(href);
@@ -10122,8 +10072,8 @@ modules['showImages'] = {
 								var apiURL = 'http://min.us/api/GetItems/' + imgHash;
 								if (typeof(this.minusCalls[apiURL]) == 'undefined') {
 									this.minusCalls[apiURL] = ele;
-									GM_xmlhttpRequest({ 
-										method: 'GET', 
+									GM_xmlhttpRequest({
+										method: 'GET',
 										url: apiURL,
 										onload: function(response) {
 											// console.log(response.responseText);
@@ -10160,14 +10110,14 @@ modules['showImages'] = {
 					this.createImageExpando(ele);
 				}
 			}
-		} else if (!(hasClass(ele,'imgFound'))) {
-			if (!(RESUtils.currentSubreddit('dashboard')) && !(ele.getAttribute('scanned') == 'true') && (checkhref.indexOf('wikipedia.org/wiki') < 0) && (checkhref.indexOf('imgur.')>=0 || checkhref.indexOf('.jpeg')>=0 || checkhref.indexOf('.jpg')>=0 || checkhref.indexOf('.gif')>=0)) {
-				var textFrag = document.createElement('span');
-				textFrag.setAttribute('class','RESdupeimg');
-				textFrag.innerHTML = ' <a class="noKeyNav" href="#img'+this.imagesRevealed[href]+'" title="click to scroll to original">[RES ignored duplicate image]</a>';
-				insertAfter(ele, textFrag);
-			}
-		}
+    } else if (!(hasClass(ele,'imgFound'))) {
+      if (!(RESUtils.currentSubreddit('dashboard')) && !(ele.getAttribute('scanned') == 'true') && (checkhref.indexOf('wikipedia.org/wiki') < 0) && (checkhref.indexOf('imgur.')>=0 || checkhref.indexOf('.jpeg')>=0 || checkhref.indexOf('.jpg')>=0 || checkhref.indexOf('.gif')>=0)) {
+        var textFrag = document.createElement('span');
+        textFrag.setAttribute('class','RESdupeimg');
+        textFrag.innerHTML = ' <a class="noKeyNav" href="#img'+this.imagesRevealed[href]+'" title="click to scroll to original">[RES ignored duplicate image]</a>';
+        insertAfter(ele, textFrag);
+      }
+    }
 	},
 	createImageExpando: function(obj) {
 		var href = obj.getAttribute('href');
@@ -10504,7 +10454,7 @@ modules['hideChildComments'] = {
 	category: 'Comments',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		automatic: {
@@ -10600,7 +10550,7 @@ modules['hideChildComments'] = {
 				if (thisToggleLink != null) {
 					if (action == 'hide') {
 						if (thisChildren != null) {
-							thisChildren.style.display = 'none' 
+							thisChildren.style.display = 'none'
 						}
 						thisToggleLink.innerHTML = 'show child comments';
 						// thisToggleLink.setAttribute('title','show child comments');
@@ -10642,7 +10592,7 @@ modules['showParent'] = {
 			// RESUtils.getOptions(this.moduleID);
 			// do stuff now!
 			// this is where your code goes...
-			
+
 			// code included from http://userscripts.org/scripts/show/34362
 			// author: lazyttrick - http://userscripts.org/users/20871
 
@@ -10657,14 +10607,14 @@ modules['showParent'] = {
 				},
 				false
 			);
-			
+
 		}
 	},
 	show: function (evt) {
 		var href = evt.target.getAttribute('href');
 		href = href.replace(location.href,'');
 		var id = href.replace(/\#/,"");
-		var top = parseInt(evt.pageY,10)+10, 
+		var top = parseInt(evt.pageY,10)+10,
 			left = parseInt(evt.pageX,10)+10;
 		try{
 			var div = createElementWithID('div','parentComment'+id);
@@ -10696,13 +10646,13 @@ modules['showParent'] = {
 	getId: function (id, parent) {
 		if(!parent)
 			return document.getElementById(id);
-		return parent.getElementById(id);	
+		return parent.getElementById(id);
 	},
 	getTag: function (name, parent) {
 		if(!parent)
 			return document.getElementsByTagName(name);
 		return parent.getElementsByTagName(name);
-	}, 
+	},
 	wireUpParentLinks: function (ele) {
 		if (ele == null) ele = document;
 		var querySelector = '.child ul.flat-list > li:nth-child(2) > a';
@@ -10711,7 +10661,7 @@ modules['showParent'] = {
 			// ele = ele.parentNode.parentNode;
 			querySelector = 'ul.flat-list > li:nth-child(2) > a';
 			var parentLinks = ele.querySelectorAll(querySelector);
-			
+
 			for (var i=0, len=parentLinks.length;i<len;i++) {
 				parentLinks[i].addEventListener('mouseover', modules['showParent'].show, false);
 				parentLinks[i].addEventListener('mouseout', modules['showParent'].hide, false);
@@ -10731,7 +10681,7 @@ modules['showParent'] = {
 				if (modules['showParent'].parentLinksi < modules['showParent'].parentLinksCount) {
 					setTimeout(arguments.callee, 1000);
 				}
-			})();		
+			})();
 		}
 	}
 };
@@ -10742,7 +10692,7 @@ modules['neverEndingReddit'] = {
 	category: 'UI',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		returnToPrevPage: {
 			type: 'boolean',
 			value: true,
@@ -10781,20 +10731,20 @@ modules['neverEndingReddit'] = {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// get this module's options...
 			// RESUtils.getOptions(this.moduleID);
-			
+
 			// modified from a contribution by Peter Siewert, thanks Peter!
 			if (typeof(modules['neverEndingReddit'].dupeHash) == 'undefined') modules['neverEndingReddit'].dupeHash = {};
 			var entries = document.body.querySelectorAll('a.comments');
 			for(var i = entries.length - 1; i > -1; i--) {
 				modules['neverEndingReddit'].dupeHash[entries[i].href] = 1;
 			}
-			
+
 			RESUtils.addCSS('#NERModal { display: none; z-index: 999; position: fixed; top: 0px; left: 0px; right: 0px; bottom: 0px; background-color: #333333; opacity: 0.6; }');
 			RESUtils.addCSS('#NERContent { display: none; position: fixed; top: 40px; z-index: 1000; width: 720px; background-color: #FFFFFF; color: #000000; padding: 10px; font-size: 12px; }');
 			RESUtils.addCSS('#NERFail { width: 95%; height: 30px; font-size: 14px; border: 1px solid #999999; border-radius: 10px 10px 10px 10px; -moz-border-radius: 10px 10px 10px 10px; -webkit-border-radius: 10px 10px 10px 10px; padding: 5px; text-align: center; bgcolor: #f0f3fc; cursor: pointer; }');
 			RESUtils.addCSS('.NERdupe p.title:after { color: #000000; font-size: 10px; content: \' (duplicate from previous page)\'; }');
 			RESUtils.addCSS('.NERPageMarker { text-align: center; color: #7f7f7f; font-size: 14px; margin-top: 6px; margin-bottom: 6px; font-weight: normal; background-color: #f0f3fc; border: 1px solid #c7c7c7; border-radius: 3px 3px 3px 3px; padding: 3px 0px 3px 0px; }');
-			
+
 			this.allLinks = document.body.querySelectorAll('#siteTable div.thing');
 			switch (this.options.hideDupes.value) {
 				case 'fade':
@@ -10804,11 +10754,11 @@ modules['neverEndingReddit'] = {
 					RESUtils.addCSS('.NERdupe { display: none; }');
 					break;
 			}
-			
+
 			// code inspired by River of Reddit, but rewritten from scratch to work across multiple browsers...
 			// Original River of Reddit author: reddy kapil
 			// Original link to Chrome extension: https://chrome.google.com/extensions/detail/bjiggjllfebckflfdjbimogjieeghcpp
-			
+
 			// set the style for our little loader widget
 			RESUtils.addCSS('#progressIndicator { width: 95%; height: 30px; font-size: 14px; border: 1px solid #999999; border-radius: 10px 10px 10px 10px; -moz-border-radius: 10px 10px 10px 10px; -webkit-border-radius: 10px 10px 10px 10px; padding: 5px; text-align: center; bgcolor: #f0f3fc; cursor: pointer; } ');
 			// store access to the siteTable div since that's where we'll append new data...
@@ -10831,7 +10781,7 @@ modules['neverEndingReddit'] = {
 					this.nextPageScrollY = nextXY.y;
 				}
 				this.attachLoaderWidget();
-				
+
 				if (this.options.returnToPrevPage.value) {
 					this.attachModalWidget();
 					// Set the current page to page 1...
@@ -10844,7 +10794,7 @@ modules['neverEndingReddit'] = {
 						this.loadNewPage(true);
 					}
 				}
-					
+
 				// watch for the user scrolling to the bottom of the page.  If they do it, load a new page.
 				if (this.options.autoLoad.value) {
 					window.addEventListener('scroll', modules['neverEndingReddit'].handleScroll, false);
@@ -10965,7 +10915,7 @@ modules['neverEndingReddit'] = {
 		} else {
 			modules['neverEndingReddit'].showFloat(false);
 		}
-	},	
+	},
 	duplicateCheck: function(newHTML){
 		var newLinks = newHTML.querySelectorAll('div.link');
 		for(var i = newLinks.length - 1; i > -1; i--) {
@@ -11082,7 +11032,7 @@ modules['neverEndingReddit'] = {
 							modules['neverEndingReddit'].setMailIcon(true);
 						} else {
 							modules['neverEndingReddit'].setMailIcon(false);
-						} 
+						}
 						// load up uppers and downers, if enabled...
 						if (modules['uppersAndDowners'].isEnabled()) {
 							modules['uppersAndDowners'].applyUppersAndDownersToComments(modules['neverEndingReddit'].nextPageURL);
@@ -11180,7 +11130,7 @@ modules['neverEndingReddit'] = {
 			this.NREFloat.style.display = 'none';
 		}
 	}
-}; 
+};
 
 modules['saveComments'] = {
 	moduleID: 'saveComments',
@@ -11188,7 +11138,7 @@ modules['saveComments'] = {
 	category: 'Comments',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 	},
@@ -11256,7 +11206,7 @@ modules['saveComments'] = {
 			if (modules['saveComments'].allCommentsi < modules['saveComments'].allCommentsCount) {
 				setTimeout(arguments.callee, 1000);
 			}
-		})();		
+		})();
 	},
 	addSaveLinkToComment: function(commentObj) {
 		var commentsUL = commentObj.querySelector('ul.flat-list');
@@ -11321,7 +11271,7 @@ modules['saveComments'] = {
 				}
 				this.storedComments = newFormat;
 				RESStorage.setItem('RESmodules.saveComments.savedComments',JSON.stringify(newFormat));
-			} 
+			}
 		}
 	},
 	saveComment: function(obj, id, href, username, comment) {
@@ -11519,7 +11469,7 @@ modules['userHighlight'] = {
 	moduleName: 'User Highlighter',
 	category: 'Users',
 	description: 'Highlights certain users in comment threads: OP, Admin, Friends, Mod - contributed by MrDerk',
-	options: { 
+	options: {
 		highlightOP: {
 			type: 'boolean',
 			value: true,
@@ -11594,7 +11544,7 @@ modules['userHighlight'] = {
 	),
 	isMatchURL: function() {
 		return RESUtils.isMatchURL(this.moduleID);
-	},	
+	},
 	go: function() {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// get this module's options...
@@ -11622,7 +11572,7 @@ modules['userHighlight'] = {
 				var color = this.options.OPColor.value;
 				var hoverColor = this.options.OPColorHover.value;
 				this.doHighlight(name,color,hoverColor);
-			}			
+			}
 		}
 	},
 	doHighlight: function(name,color,hoverColor) {
@@ -11630,10 +11580,10 @@ modules['userHighlight'] = {
 		// If we skip the noncollapsed, we can pick up the gray, collapsed versions
 		// If that's the case, you'll end up with gray as your 'default' color
 		var firstComment = document.querySelector('.noncollapsed .' + name);
-		// This kicks in if a friend/admin/mod has made a post but not a comment, 
+		// This kicks in if a friend/admin/mod has made a post but not a comment,
 		// allowing them to be highlighted at the top of the submission
-		if (firstComment === null) { 
-			firstComment = document.querySelector('.' + name); 
+		if (firstComment === null) {
+			firstComment = document.querySelector('.' + name);
 		}
 		if (firstComment != null) {
 			if (color === 'default') {
@@ -11659,7 +11609,7 @@ modules['userHighlight'] = {
 					background-color: " + hoverColor + " !important; \
 					text-decoration: none !important}");
 				// this.addCSS(css);
-			}		
+			}
 		}
 	},
 	/*addCSS: function(css) {
@@ -11685,14 +11635,14 @@ modules['userHighlight'] = {
 		}
 		return strValue;
 	}
-}; 
+};
 
 modules['styleTweaks'] = {
 	moduleID: 'styleTweaks',
 	moduleName: 'Style Tweaks',
 	category: 'UI',
 	description: 'Provides a number of style tweaks to the Reddit interface',
-	options: { 
+	options: {
 		navTop: {
 			type: 'boolean',
 			value: true,
@@ -11768,12 +11718,12 @@ modules['styleTweaks'] = {
 	),
 	isMatchURL: function() {
 		return RESUtils.isMatchURL(this.moduleID);
-	},	
+	},
 	go: function() {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// get this module's options...
 			// RESUtils.getOptions(this.moduleID);
-			
+
 			// wow, Reddit doesn't define a visited class for any links on comments pages...
 			// let's put that back if users want it back.
 			// If not, we still need a visited class for links in comments, like imgur photos for example, or inline image viewer can't make them look different when expanded!
@@ -11845,7 +11795,7 @@ modules['styleTweaks'] = {
 						url: jsonURL
 					}
 					chrome.extension.sendRequest(thisJSON, function(response) {
-						// send message to background.html 
+						// send message to background.html
 						var tweet = response;
 						thisExpando.innerHTML = '<form class="usertext"><div class="usertext-body"><div class="md"><div><img style="display: block;" src="'+tweet.user.profile_image_url+'"></div>' + tweet.user.screen_name + ': ' + tweet.text + '</div></div></form>';
 						thisExpando.style.display = 'block';
@@ -11892,7 +11842,7 @@ modules['styleTweaks'] = {
 			removeClass(e.target,'expanded');
 			thisExpando.style.display = 'none';
 		}
-		
+
 	},
 	navTop: function() {
 		RESUtils.addCSS('#header-bottom-right { top: 19px; border-radius: 0px 0px 0px 3px; -moz-border-radius: 0px 0px 0px 3px; -webkit-border-radius: 0px 0px 0px 3px; bottom: auto;  }');
@@ -11946,9 +11896,8 @@ modules['styleTweaks'] = {
 	},
 	commentBoxes: function() {
 		// replaced with a less intensive method... adapted from Reddit Comment Boxes via:
-		// @description	  Updated version of Tiby312's Reddit Comment Boxes script (http://userscripts.org/scripts/show/63628) 
+		// @description	  Updated version of Tiby312's Reddit Comment Boxes script (http://userscripts.org/scripts/show/63628)
 		// @author        flatluigi
-		
 
 		RESUtils.addCSS(".parentComment { background-color:#ffffff !important; } ");
 		RESUtils.addCSS(".comment{");
@@ -11977,31 +11926,31 @@ modules['styleTweaks'] = {
 		}
 		RESUtils.addCSS(".comment .comment{"+
 		"	margin-right:0px!important;"+
-		"	background-color:#F7F7F8 !important;"+	
+		"	background-color:#F7F7F8 !important;"+
 		"}"+
 		".comment .comment .comment{"+
-		"	background-color:#ffffff !important;"+	
+		"	background-color:#ffffff !important;"+
 		"}"+
 		".comment .comment .comment .comment{"+
-		"	background-color:#F7F7F8 !important;"+	
+		"	background-color:#F7F7F8 !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment{"+
-		"	background-color:#ffffff !important;"+	
+		"	background-color:#ffffff !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment .comment{"+
-		"	background-color:#F7F7F8 !important;"+	
+		"	background-color:#F7F7F8 !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment .comment .comment{"+
-		"	background-color:#ffffff !important;"+	
+		"	background-color:#ffffff !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment .comment .comment .comment{"+
-		"	background-color:#F7F7F8 !important;"+	
+		"	background-color:#F7F7F8 !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment .comment .comment .comment .comment{"+
-		"	background-color:#ffffff !important;"+	
+		"	background-color:#ffffff !important;"+
 		"}"+
 		".comment .comment .comment .comment .comment .comment .comment .comment .comment .comment{"+
-		"	background-color:#F7F7F8 !important;"+	
+		"	background-color:#F7F7F8 !important;"+
 		"}"+
 		/*
 		".commentarea, .link, .comment {"+
@@ -12010,7 +11959,7 @@ modules['styleTweaks'] = {
 		*/
 		"body > .content {"+
 		" padding-right:0px; !important;"+
-		"}"); 
+		"}");
 		if (this.options.commentHoverBorder.value) {
 			RESUtils.addCSS(" .comment:hover {border: 1px solid #99AAEE !important; }");
 		}
@@ -12127,7 +12076,7 @@ modules['styleTweaks'] = {
 			css += ".res-nightmode .tabmenu li a, .res-nightmode .login-form, .res-nightmode .login-form input[name*='passwd'], .res-nightmode .login-form-side .submit {background-color:#bbb;}";
 			css += ".res-nightmode .login-form-side input {width:auto!important;}";
 			css += ".res-nightmode form.login-form.login-form-side {background-color: #888;color: #eee;}";
-			css += ".res-nightmode #RESConsoleTopBar, .res-nightmode .moduleHeader, .res-nightmode .allOptionsContainer, .res-nightmode .optionContainer {background-color: #ccc;color:black !important;}"; 
+			css += ".res-nightmode #RESConsoleTopBar, .res-nightmode .moduleHeader, .res-nightmode .allOptionsContainer, .res-nightmode .optionContainer {background-color: #ccc;color:black !important;}";
 			css += ".res-nightmode #siteTable sitetable{background-color:#222 !important;}";
 			css += ".res-nightmode #commentNavButtons * {color:white !important;}";
 			css += ".res-nightmode .usertable .btn {border-color:#aa9 !important;color:#aa9 !important;}";
@@ -12261,34 +12210,34 @@ modules['styleTweaks'] = {
 			css += '.savedComment { color: #dddddd !important; }';
 			if (this.options.commentBoxes.value) {
 				css += ".comment{"+
-				"	background-color:#444444 !important;"+	
+				"	background-color:#444444 !important;"+
 				"}"+
 				".comment .comment{"+
-				"	background-color:#111111 !important;"+	
+				"	background-color:#111111 !important;"+
 				"}"+
 				".comment .comment .comment{"+
-				"	background-color:#444444 !important;"+	
+				"	background-color:#444444 !important;"+
 				"}"+
 				".comment .comment .comment .comment{"+
-				"	background-color:#111111 !important;"+	
+				"	background-color:#111111 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment{"+
-				"	background-color:#444444 !important;"+	
+				"	background-color:#444444 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment .comment{"+
-				"	background-color:#111111 !important;"+	
+				"	background-color:#111111 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment .comment .comment{"+
-				"	background-color:#444444 !important;"+	
+				"	background-color:#444444 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment .comment .comment .comment{"+
-				"	background-color:#111111 !important;"+	
+				"	background-color:#111111 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment .comment .comment .comment .comment{"+
-				"	background-color:#444444 !important;"+	
+				"	background-color:#444444 !important;"+
 				"}"+
 				".comment .comment .comment .comment .comment .comment .comment .comment .comment .comment{"+
-				"	background-color:#111111 !important;"+	
+				"	background-color:#111111 !important;"+
 				"}";
 				css += '.thing { margin-bottom: 10px; border: 1px solid #666666 !important; } ';
 			}
@@ -12312,7 +12261,7 @@ modules['styleTweaks'] = {
 		}
 		// GM_addStyle(css);
 	}
-}; 
+};
 
 modules['accountSwitcher'] = {
 	moduleID: 'accountSwitcher',
@@ -12491,7 +12440,7 @@ modules['RESTips'] = {
 	category: 'UI',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		dailyTip: {
@@ -12522,7 +12471,7 @@ modules['RESTips'] = {
 				modules['RESTips'].randomTip();
 			}, false);
 			$('#RESDropdownOptions').append(this.menuItem);
-			
+
 			if (this.options.dailyTip.value) {
 				this.dailyTip();
 			}
@@ -12610,12 +12559,12 @@ modules['RESTips'] = {
 		{
 			message: 'Welcome to RES. You can turn modules on and off, and configure settings for the modules using the gear icon link at the top right. For feature requests, bug reports, or just help getting a question answered, be sure to subscribe to <a href="http://reddit.com/r/Enhancement">/r/Enhancement</a>.'
 		},
-		{ 
+		{
 			message: "Most of RES is configurable. Roll over the gear icon and click the settings console link to check it out.",
 			attachTo: "#openRESPrefs",
 			position: 5
 		},
-		{ 
+		{
 			message: "Click the tag icon next to a user to tag that user with any name you like - you can also color code the tag.",
 			attachTo: ".RESUserTagImage:visible",
 			position: 3
@@ -12662,7 +12611,7 @@ modules['RESTips'] = {
 				  title: "RES Tips and Tricks"
 			});
 		}
-	
+
 	},
 	showTip: function(idx) {
 		if (typeof(this.tipsInitialized) == 'undefined') {
@@ -12682,7 +12631,7 @@ modules['filteReddit'] = {
 	category: 'Filters',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		NSFWfilter: {
@@ -12705,10 +12654,10 @@ modules['filteReddit'] = {
 					value: 'everywhere',
 					description: 'Apply filter to:'
 				},
-				{ 
-					name: 'reddits', 
-					type: 'list', 
-					source: '/api/search_reddit_names.json', 
+				{
+					name: 'reddits',
+					type: 'list',
+					source: '/api/search_reddit_names.json',
 					hintText: 'type a subreddit name',
 					onResult: function(response) {
 						var names = response.names;
@@ -12717,7 +12666,7 @@ modules['filteReddit'] = {
 							results.push({id: names[i], name: names[i]});
 						}
 						return results;
-					}					
+					}
 				} //,
 				/* { name: 'inclusions', type: 'list', source: location.protocol + '/api/search_reddit_names' } */
 			],
@@ -12750,10 +12699,10 @@ modules['filteReddit'] = {
 					value: 'everywhere',
 					description: 'Apply filter to:'
 				},
-				{ 
-					name: 'reddits', 
-					type: 'list', 
-					source: '/api/search_reddit_names.json', 
+				{
+					name: 'reddits',
+					type: 'list',
+					source: '/api/search_reddit_names.json',
 					hintText: 'type a subreddit name',
 					onResult: function(response) {
 						var names = response.names;
@@ -12762,7 +12711,7 @@ modules['filteReddit'] = {
 							results.push({id: names[i], name: names[i]});
 						}
 						return results;
-					}					
+					}
 				} //,
 				/* { name: 'inclusions', type: 'list', source: location.protocol + '/api/search_reddit_names' } */
 			],
@@ -12852,7 +12801,7 @@ modules['filteReddit'] = {
 		var result = temp.childNodes[0].nodeValue;
 		temp.removeChild(temp.firstChild);
 		delete temp;
-		return result;	
+		return result;
 	},
 	arrayContainsSubstring: function(obj, stringToSearch, reddit, fullmatch) {
 	  stringToSearch = this.unescapeHTML(stringToSearch);
@@ -12894,7 +12843,7 @@ modules['newCommentCount'] = {
 	category: 'Comments',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		cleanComments: {
@@ -12933,7 +12882,7 @@ modules['newCommentCount'] = {
 				this.addSubscribeLink();
 				// this just doesn't really work that well since often times new comments are under the "load more comments" threshhold
 				// or if you are visiting the thread often, Reddit Gold doesn't even mark the comments new...
-				/* 
+				/*
 				if (typeof(this.commentCounts[this.currentCommentID].subscriptionDate) != 'undefined') {
 					// we are subscribed to this thread already, so scroll to first new post if possible...
 					var firstNew = document.querySelector('.new-comment');
@@ -13069,9 +13018,9 @@ modules['newCommentCount'] = {
 		var now = new Date();
 		modules['newCommentCount'].commentCounts[commentID].subscriptionDate = now.getTime();
 		RESStorage.setItem('RESmodules.newCommentCount.counts', JSON.stringify(modules['newCommentCount'].commentCounts));
-		RESUtils.notification({ 
-			header: 'Subscription Notification', 
-			message: 'You are now subscribed to this thread for 48 hours. You will be notified if new comments are posted since your last visit.' 
+		RESUtils.notification({
+			header: 'Subscription Notification',
+			message: 'You are now subscribed to this thread for 48 hours. You will be notified if new comments are posted since your last visit.'
 		}, 3000);
 	},
 	unsubscribeFromThread: function(commentID) {
@@ -13082,8 +13031,8 @@ modules['newCommentCount'] = {
 		var now = new Date();
 		delete modules['newCommentCount'].commentCounts[commentID].subscriptionDate;
 		RESStorage.setItem('RESmodules.newCommentCount.counts', JSON.stringify(modules['newCommentCount'].commentCounts));
-		RESUtils.notification({ 
-			header: 'Subscription Notification', 
+		RESUtils.notification({
+			header: 'Subscription Notification',
 			message: 'You are now unsubscribed from this thread.'
 		}, 3000);
 	},
@@ -13122,8 +13071,8 @@ modules['newCommentCount'] = {
 					if (subObj.count < commentInfo[0].data.children[0].data.num_comments) {
 						modules['newCommentCount'].commentCounts[commentID].count = commentInfo[0].data.children[0].data.num_comments;
 						RESStorage.setItem('RESmodules.newCommentCount.counts', JSON.stringify(modules['newCommentCount'].commentCounts));
-						RESUtils.notification({ 
-							header: 'Subscription Notification', 
+						RESUtils.notification({
+							header: 'Subscription Notification',
 							message: '<p>New comments posted to thread:</p> <a href="'+subObj.url+'">' + subObj.title + '</a> <p><a class="RESNotificationButtonBlue" href="'+subObj.url+'">view the submission</a></p><div class="clear"></div>'
 						}, 10000);
 					}
@@ -13179,7 +13128,7 @@ modules['spamButton'] = {
 				// insert spam button second to last in the list... this is a bit hacky and assumes singleClick is enabled...
 				// it should probably be made smarter later, but there are so many variations of configs, etc, that it's a bit tricky.
 				allLists[i].lastChild.parentNode.insertBefore(spam, allLists[i].lastChild);
-				
+
 				// it's faster to figure out the author only if someone actually clicks the link, so we're modifying the code to listen for clicks and not do all that queryselector stuff.
 				var a = document.createElement('a');
 				a.setAttribute('class', 'option');
@@ -13211,7 +13160,7 @@ modules['commentNavigator'] = {
 	moduleName: 'Comment Navigator',
 	category: 'Comments',
 	description: 'Provides a comment navigation tool to easily find comments by OP, mod, etc.',
-	options: { 
+	options: {
 		showByDefault: {
 			type: 'boolean',
 			value: false,
@@ -13227,7 +13176,7 @@ modules['commentNavigator'] = {
 	),
 	isMatchURL: function() {
 		return RESUtils.isMatchURL(this.moduleID);
-	},	
+	},
 	go: function() {
 		if ((this.isEnabled()) && (this.isMatchURL())) {
 			// draw the commentNav box
@@ -13250,7 +13199,7 @@ modules['commentNavigator'] = {
 			RESUtils.addCSS('.commentNavSortType:hover { text-decoration: underline; }');
 			RESUtils.addCSS('#REScommentNavToggle span { float: left; margin-left: 6px; }');
 			RESUtils.addCSS('.menuarea > .spacer { float: left; }');
-			
+
 			this.commentNavBox = createElementWithID('div','REScommentNavBox');
 			addClass(this.commentNavBox, 'RESDialogSmall');
 			// var commentArea = document.body.querySelector('div.sitetable.nestedlisting');
@@ -13477,7 +13426,7 @@ modules['commentNavigator'] = {
 		thisXY=RESUtils.getXYpos(modules['commentNavigator'].posts[category][modules['commentNavigator'].nav[category]]);
 		RESUtils.scrollTo(0,thisXY.y);
 	}
-}; 
+};
 
 /*
 modules['redditProfiles'] = {
@@ -13684,7 +13633,7 @@ modules['subredditManager'] = {
 			RESUtils.addCSS('#srLeftContainer { margin-right: 6px; }');
 		}
 		RESUtils.addCSS('#srLeftContainer { z-index: 4; margin-left: -4px; padding-left: 4px; }');
-		
+
 		// RESUtils.addCSS('#RESShortcuts { position: absolute; left: '+ this.srLeftContainerWidth+'px;  z-index: 6; white-space: nowrap; overflow-x: hidden; padding-left: 2px; margin-top: -2px; padding-top: 2px; }');
 		RESUtils.addCSS('#RESShortcutsViewport { width: auto; max-height: 20px; overflow: hidden; } ');
 		RESUtils.addCSS('#RESShortcuts { z-index: 6; white-space: nowrap; overflow-x: hidden; padding-left: 2px; }');
@@ -13715,8 +13664,7 @@ modules['subredditManager'] = {
 		RESUtils.addCSS('#shortCutsAddForm label { display: inline-block; width: 100px; }');
 		RESUtils.addCSS('#shortCutsAddForm input[type=text] { width: 170px; margin-bottom: 6px; }');
 		RESUtils.addCSS('#addSubreddit { float: right; cursor: pointer; padding-top: 3px; padding-bottom: 3px; padding-left: 5px; padding-right: 5px; font-size: 12px; color: #ffffff; border: 1px solid #636363; border-radius: 3px 3px 3px 3px; -moz-border-radius: 3px 3px 3px 3px; -webkit-border-radius: 3px 3px 3px 3px; background-color: #5cc410; }');
-		
-		
+
 		// this shows the sr-header-area that we hid while rendering it (to curb opera's glitchy "jumping")...
 		if (typeof(opera) != 'undefined') {
 			RESUtils.addCSS('#sr-header-area { display: block !important; }');
@@ -13818,8 +13766,8 @@ modules['subredditManager'] = {
 				RESStorage.setItem('RESmodules.subredditManager.subredditShortcuts.'+RESUtils.loggedInUser(), shortCuts);
 				RESStorage.removeItem('RESmodules.betteReddit.subredditShortcuts.'+RESUtils.loggedInUser());
 				RESUtils.notification({
-					header: 'RES Notification', 
-					message: 'Subreddit Manager is now a separate module (removed from betteReddit) to avoid confusion. If you dislike this feature, you may disable the module in the RES console' 
+					header: 'RES Notification',
+					message: 'Subreddit Manager is now a separate module (removed from betteReddit) to avoid confusion. If you dislike this feature, you may disable the module in the RES console'
 				});
 			}
 		}
@@ -13832,7 +13780,7 @@ modules['subredditManager'] = {
 						subreddit: this.mySubredditShortcuts[i],
 						displayName: this.mySubredditShortcuts[i]
 					}
-				} 
+				}
 				var thisShortCut = document.createElement('a');
 				thisShortCut.setAttribute('draggable','true');
 				thisShortCut.setAttribute('orderIndex',i);
@@ -13880,7 +13828,7 @@ modules['subredditManager'] = {
 					sep.setAttribute('class','separator');
 					sep.innerHTML = '-';
 					this.shortCutsContainer.appendChild(sep);
-				} 
+				}
 			}
 			if (this.mySubredditShortcuts.length == 0) {
 				this.shortCutsContainer.style.textTransform = 'none';
@@ -13946,7 +13894,7 @@ modules['subredditManager'] = {
 		this.editShortcutDialog.innerHTML = '<form name="editSubredditShortcut"><h3>Edit Shortcut</h3><div id="editShortcutClose" class="RESCloseButton">X</div><label for="subreddit">Subreddit:</label> <input type="text" name="subreddit" value="'+subreddit+'" id="shortcut-subreddit"><br>';
 		this.editShortcutDialog.innerHTML += '<label for="displayName">Display Name:</label><input type="text" name="displayName" value="'+ele.innerHTML+'" id="shortcut-displayname">';
 		this.editShortcutDialog.innerHTML += '<input type="hidden" name="idx" value="'+idx+'"><input type="button" name="shortcut-save" value="save" id="shortcut-save"></form>';
-		
+
 		this.subredditInput = this.editShortcutDialog.querySelector('input[name=subreddit]');
 		this.displayNameInput = this.editShortcutDialog.querySelector('input[name=displayName]');
 
@@ -14173,7 +14121,7 @@ modules['subredditManager'] = {
 				var modmail = document.getElementById('modmail');
 				if ((modmail) && (this.options.linkMod.value)) this.staticShortCutsContainer.innerHTML += '<span class="separator">-</span><a href="/r/mod/">MOD</a>';
 			}
-			
+
 			/*
 			this.staticShortCutsContainer.innerHTML = ' <span class="separator">|</span><a href="/r/all/">ALL</a><span class="separator">-</span><a href="/r/random/">RANDOM</a>';
 			if (RESUtils.loggedInUser() != null) {
@@ -14182,8 +14130,8 @@ modules['subredditManager'] = {
 			*/
 			this.srLeftContainer.appendChild(this.staticShortCutsContainer);
 			this.srLeftContainer.appendChild(sep);
-			this.headerContents.appendChild(this.srLeftContainer);			
-						
+			this.headerContents.appendChild(this.srLeftContainer);
+
 			this.shortCutsViewport = document.createElement('div');
 			this.shortCutsViewport.setAttribute('id','RESShortcutsViewport');
 			this.headerContents.appendChild(this.shortCutsViewport);
@@ -14196,7 +14144,7 @@ modules['subredditManager'] = {
 			this.shortCutsEditContainer = document.createElement('div');
 			this.shortCutsEditContainer.setAttribute('id','RESShortcutsEditContainer');
 			this.headerContents.appendChild(this.shortCutsEditContainer);
-			
+
 			// now add an event listener to show the edit bar on hover...
 			/* not working so great, too much glitchiness... maybe we'll address this later when we have more time...
 			this.headerContents.addEventListener('mouseover', modules['subredditManager'].showShortcutButtons, false);
@@ -14241,7 +14189,7 @@ modules['subredditManager'] = {
 					<input type="submit" name="submit" value="add" id="addSubreddit"> \
 					<div style="clear: both; float: right; margin-top: 5px;"><a style="font-size: 9px;" href="/reddits">Edit frontpage subscriptions</a></div> \
 				</form> \
-			';			
+			';
 			this.shortCutsAddFormField = this.shortCutsAddFormContainer.querySelector('#newShortcut');
 			this.shortCutsAddFormFieldDisplayName = this.shortCutsAddFormContainer.querySelector('#displayName');
 			modules['subredditManager'].shortCutsAddFormField.addEventListener('keyup', function(e) {
@@ -14256,7 +14204,7 @@ modules['subredditManager'] = {
 					modules['subredditManager'].shortCutsAddFormFieldDisplayName.blur();
 				}
 			}, false);
-			
+
 			// add the "add shortcut" form...
 			this.shortCutsAddForm = this.shortCutsAddFormContainer.querySelector('#shortCutsAddForm');
 			this.shortCutsAddForm.addEventListener('submit', function(e) {
@@ -14283,7 +14231,7 @@ modules['subredditManager'] = {
 			}, false);
 			this.shortCutsEditContainer.appendChild(this.shortCutsAdd);
 			document.body.appendChild(this.shortCutsAddFormContainer);
-			
+
 			// add the "trash bin"...
 			this.shortCutsTrash = document.createElement('div');
 			// thisShortCut.setAttribute('draggable','true');
@@ -14296,7 +14244,7 @@ modules['subredditManager'] = {
 			this.shortCutsTrash.addEventListener('dragover', modules['subredditManager'].subredditDragOver, false);
 			this.shortCutsTrash.addEventListener('drop', modules['subredditManager'].subredditDrop, false);
 			this.shortCutsEditContainer.appendChild(this.shortCutsTrash);
-			
+
 			// add left scroll arrow...
 			this.shortCutsLeft = document.createElement('div');
 			this.shortCutsLeft.setAttribute('id','RESShortcutsLeft');
@@ -14311,7 +14259,7 @@ modules['subredditManager'] = {
 				}
 			}, false);
 			this.shortCutsEditContainer.appendChild(this.shortCutsLeft);
-			
+
 			this.redrawShortcuts();
 		}
 	},
@@ -14396,7 +14344,7 @@ modules['subredditManager'] = {
 				}
 			}
 		});
-	
+
 	},
 	getSubreddits: function() {
 		modules['subredditManager'].mySubreddits = [];
@@ -14408,7 +14356,7 @@ modules['subredditManager'] = {
 			if (!this.gettingSubreddits) {
 				this.gettingSubreddits = true;
 				this.getSubredditJSON();
-			} 
+			}
 		} else {
 			modules['subredditManager'].mySubreddits = safeJSON.parse(check, 'RESmodules.subredditManager.subreddits.'+RESUtils.loggedInUser());
 			this.populateSubredditDropdown();
@@ -14502,7 +14450,7 @@ modules['subredditManager'] = {
 					if (adisp < bdisp) return 1;
 					if (adisp == bdisp) return 0;
 					return -1;
-				});		
+				});
 			} else {
 				modules['subredditManager'].lvHeader.innerHTML = 'Last Visited';
 				modules['subredditManager'].srHeader.innerHTML = 'subreddit <div class="sortAsc"></div>';
@@ -14642,8 +14590,8 @@ modules['subredditManager'] = {
 			if (RESUtils.proEnabled()) {
 				modules['RESPro'].saveModuleData('subredditManager');
 			}
-			RESUtils.notification({ 
-				header: 'Subreddit Manager Notification', 
+			RESUtils.notification({
+				header: 'Subreddit Manager Notification',
 				message: 'Subreddit shortcut added. You can edit by double clicking, or trash by dragging to the trash can.'
 			});
 		}
@@ -14711,7 +14659,7 @@ modules['RESPro'] = {
 	category: 'Pro Features',
 	options: {
 		// any configurable options you have go here...
-		// options must have a type and a value.. 
+		// options must have a type and a value..
 		// valid types are: text, boolean (if boolean, value must be true or false)
 		// for example:
 		username: {
@@ -14764,7 +14712,7 @@ modules['RESPro'] = {
 	},
 	autoSync: function() {
 		modules['RESPro'].authenticate(modules['RESPro'].savePrefs);
-		
+
 		// modules['RESPro'].authenticate(function() {
 		//	modules['RESPro'].saveModuleData('saveComments');
 		// });
@@ -14813,7 +14761,7 @@ modules['RESPro'] = {
 							thisComments = JSON.stringify(thisComments);
 							RESStorage.setItem('RESmodules.saveComments.savedComments',thisComments);
 							RESUtils.notification({
-								header: 'RES Pro Notification', 
+								header: 'RES Pro Notification',
 								message: 'Saved comments synced to server'
 							});
 						} else {
@@ -14854,7 +14802,7 @@ modules['RESPro'] = {
 						if (resp.success) {
 							if (RESConsole.proSubredditManagerSaveButton) RESConsole.proSubredditManagerSaveButton.innerHTML = 'Saved!';
 							RESUtils.notification({
-								header: 'RES Pro Notification', 
+								header: 'RES Pro Notification',
 								message: 'Subreddit shortcuts synced to server'
 							});
 						} else {
@@ -14888,7 +14836,7 @@ modules['RESPro'] = {
 							for (attrname in serverData) {
 								if (typeof(currentData[attrname]) == 'undefined') {
 									currentData[attrname] = serverData[attrname];
-								} 
+								}
 							}
 							// console.log(JSON.stringify(prefsData));
 							RESStorage.setItem('RESmodules.saveComments.savedComments', JSON.stringify(currentData));
@@ -15069,7 +15017,7 @@ modules['RESPro'] = {
 							modules['RESPro'].lastAuthFailed = true;
 							RESStorage.setItem('RESmodules.RESPro.lastAuthFailed','true');
 							RESUtils.notification({
-								header: 'RES Pro Notification', 
+								header: 'RES Pro Notification',
 								message: 'Authentication failed - check your username and password.'
 							});
 						}
@@ -15078,7 +15026,7 @@ modules['RESPro'] = {
 			}
 		}
 	}
-}; 
+};
 */
 
 modules['dashboard'] = {
@@ -15289,13 +15237,13 @@ modules['dashboard'] = {
 			/* prePopulate: prepop, */
 			searchingText: 'Searching for matching reddits - may take a few seconds...',
 			hintText: 'Type one or more subreddits for which to create a widget.',
-			resultsFormatter: function(item) { 
+			resultsFormatter: function(item) {
 				var thisDesc = item[this.propertyToSearch];
 				if (item['failedResult']) thisDesc += ' - [this subreddit may not exist, ensure proper spelling]';
-				return "<li>" + thisDesc + "</li>" 
+				return "<li>" + thisDesc + "</li>"
 			}
 		});
-		
+
 		$(this.dashboardAddComponent).find('#addRedditForm').submit(
 			function(e) {
 				e.preventDefault();
@@ -15326,7 +15274,7 @@ modules['dashboard'] = {
 				$('#addUserFormContainer').fadeOut(function() {
 					$('#addWidgetButtons').fadeIn();
 				});
-				
+
 			}
 		);
 		$(this.siteTable).append(this.dashboardAddComponent);
@@ -15399,7 +15347,7 @@ modules['dashboard'] = {
 				basePath: thisWidget.basePath,
 				numPosts: thisWidget.numPosts,
 				sortBy: thisWidget.sortBy,
-				minimized: thisWidget.minimized 
+				minimized: thisWidget.minimized
 			}
 		}
 		// set the sort by properly...
@@ -15576,21 +15524,20 @@ modules['dashboard'] = {
 				basePath: thisBasePath
 			}, true);
 			e.target.innerHTML = '-dashboard';
-			RESUtils.notification({ 
-				header: 'Dashboard Notification', 
+			RESUtils.notification({
+				header: 'Dashboard Notification',
 				message: 'Dashboard widget added for '+thisBasePath+' <p><a class="RESNotificationButtonBlue" href="/r/Dashboard">view the dashboard</a></p><div class="clear"></div>'
 			});
 			addClass(e.target,'remove');
 		}
 	}
-}; 
-
+};
 
 /* END MODULES */
 
 /*
-	* Konami-JS ~ 
-	* :: Now with support for touch events and multiple instances for 
+	* Konami-JS ~
+	* :: Now with support for touch events and multiple instances for
 	* :: those situations that call for multiple easter eggs!
 	* Code: http://konami-js.googlecode.com/
 	* Examples: http://www.snaptortoise.com/konami-js
@@ -15611,7 +15558,7 @@ var Konami = function() {
 					// IE
 					obj["e"+type+fn] = fn;
 					obj[type+fn] = function() { obj["e"+type+fn]( window.event,ref_obj ); }
-	
+
 					obj.attachEvent( "on"+type, obj[type+fn] );
 				}
 			},
@@ -15619,9 +15566,8 @@ var Konami = function() {
 	        prepattern:"38384040373937396665",
 			almostThere: false,
 	        pattern:"3838404037393739666513",
-	        load: function(link) {	
-				
-				this.addEvent(document,"keydown", function(e,ref_obj) {											
+	        load: function(link) {
+				this.addEvent(document,"keydown", function(e,ref_obj) {
 					if (ref_obj) konami = ref_obj; // IE
 					konami.input+= e ? e.keyCode : event.keyCode;
 					if (konami.input.length > konami.pattern.length) konami.input = konami.input.substr((konami.input.length - konami.pattern.length));
@@ -15637,7 +15583,7 @@ var Konami = function() {
 					}
             	},this);
            this.iphone.load(link)
-	                
+
 				},
 	        code: function(link) { window.location=link},
 	        iphone:{
@@ -15653,24 +15599,24 @@ var Konami = function() {
 	                load: function(link){
 										orig_keys = this.keys;
 	    							konami.addEvent(document,"touchmove",function(e){
-	                          if(e.touches.length == 1 && konami.iphone.capture==true){ 
-	                            var touch = e.touches[0]; 
+	                          if(e.touches.length == 1 && konami.iphone.capture==true){
+	                            var touch = e.touches[0];
 	                                konami.iphone.stop_x = touch.pageX;
 	                                konami.iphone.stop_y = touch.pageY;
-	                                konami.iphone.tap = false; 
+	                                konami.iphone.tap = false;
 	                                konami.iphone.capture=false;
 	                                konami.iphone.check_direction();
 	                                }
-	                                });               
+	                                });
 	                        konami.addEvent(document,"touchend",function(evt){
-	                                if (konami.iphone.tap==true) konami.iphone.check_direction(link);           
+	                                if (konami.iphone.tap==true) konami.iphone.check_direction(link);
 	                                },false);
 	                        konami.addEvent(document,"touchstart", function(evt){
 	                                konami.iphone.start_x = evt.changedTouches[0].pageX
 	                                konami.iphone.start_y = evt.changedTouches[0].pageY
 	                                konami.iphone.tap = true
 	                                konami.iphone.capture = true
-	                                });               
+	                                });
 	                                },
 	                check_direction: function(link){
 	                        x_magnitude = Math.abs(this.start_x-this.stop_x)
@@ -15678,10 +15624,10 @@ var Konami = function() {
 	                        x = ((this.start_x-this.stop_x) < 0) ? "RIGHT" : "LEFT";
 	                        y = ((this.start_y-this.stop_y) < 0) ? "DOWN" : "UP";
 	                        result = (x_magnitude > y_magnitude) ? x : y;
-	                        result = (this.tap==true) ? "TAP" : result;                     
+	                        result = (this.tap==true) ? "TAP" : result;
 
 	                        if (result==this.keys[0]) this.keys = this.keys.slice(1,this.keys.length)
-	                        if (this.keys.length==0) { 
+	                        if (this.keys.length==0) {
 								this.keys=this.orig_keys;
 								this.code(link)
 							}
@@ -15693,7 +15639,7 @@ var Konami = function() {
 
 function RESInit() {
 	if (typeof(self.on) == 'function') {
-		// firefox addon sdk... we've included jQuery... 
+		// firefox addon sdk... we've included jQuery...
 		if (typeof($) != 'function') {
 			console.log('Uh oh, something has gone wrong loading jQuery...');
 		}
@@ -15878,7 +15824,6 @@ $.TokenList = function (input, url_or_data, settings) {
     } else {
         settings.classes = DEFAULT_CLASSES;
     }
-
 
     // Save the tokens
     var saved_tokens = [];
@@ -16121,7 +16066,7 @@ $.TokenList = function (input, url_or_data, settings) {
             }
         });
     }
-    
+
     this.getTokens = function() {
    		return saved_tokens;
    	}
@@ -16365,7 +16310,7 @@ $.TokenList = function (input, url_or_data, settings) {
     function highlight_term(value, term) {
         return value.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + term + ")(?![^<>]*>)(?![^&;]+;)", "gi"), "<b>$1</b>");
     }
-    
+
     function find_value_and_highlight_term(template, value, term) {
         return template.replace(new RegExp("(?![^&;]+;)(?!<[^<>]*)(" + value + ")(?![^<>]*>)(?![^&;]+;)", "g"), highlight_term(value, term));
     }
@@ -16388,11 +16333,11 @@ $.TokenList = function (input, url_or_data, settings) {
 
             $.each(results, function(index, value) {
                 var this_li = settings.resultsFormatter(value);
-                
-                this_li = find_value_and_highlight_term(this_li ,value[settings.propertyToSearch], query);            
-                
+
+                this_li = find_value_and_highlight_term(this_li ,value[settings.propertyToSearch], query);
+
                 this_li = $(this_li).appendTo(dropdown_ul);
-                
+
                 if(index % 2) {
                     this_li.addClass(settings.classes.dropdownItem);
                 } else {
@@ -16576,7 +16521,7 @@ $.TokenList.Cache = function (options) {
  */
 
 (function(){var a={getSelection:function(){var b=this.jquery?this[0]:this;return(("selectionStart" in b&&function(){var c=b.selectionEnd-b.selectionStart;return{start:b.selectionStart,end:b.selectionEnd,length:c,text:b.value.substr(b.selectionStart,c)}})||(document.selection&&function(){b.focus();var d=document.selection.createRange();if(d==null){return{start:0,end:b.value.length,length:0}}var c=b.createTextRange();var e=c.duplicate();c.moveToBookmark(d.getBookmark());e.setEndPoint("EndToStart",c);return{start:e.text.length,end:e.text.length+d.text.length,length:d.text.length,text:d.text}})||function(){return{start:0,end:b.value.length,length:0}})()},replaceSelection:function(){var b=this.jquery?this[0]:this;var c=arguments[0]||"";return(("selectionStart" in b&&function(){b.value=b.value.substr(0,b.selectionStart)+c+b.value.substr(b.selectionEnd,b.value.length);return this})||(document.selection&&function(){b.focus();document.selection.createRange().text=c;return this})||function(){b.value+=c;return this})()}};jQuery.each(a,function(b){jQuery.fn[b]=this})})();
- 
+
 // END fieldSelection jquery plugin
 
 // guiders jquery plugin
@@ -16665,10 +16610,10 @@ guiders = (function($){
         if (thisButton.onclick) {
           thisButtonElem.bind("click", thisButton.onclick);
         } else if (!thisButton.onclick &&
-                   thisButton.name.toLowerCase() === guiders._closeButtonTitle.toLowerCase()) { 
+                   thisButton.name.toLowerCase() === guiders._closeButtonTitle.toLowerCase()) {
           thisButtonElem.bind("click", function() { guiders.hideAll(); });
         } else if (!thisButton.onclick &&
-                   thisButton.name.toLowerCase() === guiders._nextButtonTitle.toLowerCase()) { 
+                   thisButton.name.toLowerCase() === guiders._nextButtonTitle.toLowerCase()) {
           thisButtonElem.bind("click", function() { guiders.next(); });
         }
       }
@@ -16974,15 +16919,12 @@ guiders = (function($){
   return guiders;
 }).call(this, jQuery);
 
-
 // END guiders jquery plugin
 
 // dragsort jquery plugin
 // jQuery List DragSort v0.4.3
 // License: http://dragsort.codeplex.com/license
 (function(b){b.fn.dragsort=function(k){var d=b.extend({},b.fn.dragsort.defaults,k),g=[],a=null,j=null;this.selector&&b("head").append("<style type='text/css'>"+(this.selector.split(",").join(" "+d.dragSelector+",")+" "+d.dragSelector)+" { cursor: pointer; }</style>");this.each(function(k,i){b(i).is("table")&&b(i).children().size()==1&&b(i).children().is("tbody")&&(i=b(i).children().get(0));var m={draggedItem:null,placeHolderItem:null,pos:null,offset:null,offsetLimit:null,scroll:null,container:i,init:function(){b(this.container).attr("data-listIdx", k).mousedown(this.grabItem).find(d.dragSelector).css("cursor","pointer");b(this.container).children(d.itemSelector).each(function(a){b(this).attr("data-itemIdx",a)})},grabItem:function(e){if(!(e.which!=1||b(e.target).is(d.dragSelectorExclude))){for(var c=e.target;!b(c).is("[data-listIdx='"+b(this).attr("data-listIdx")+"'] "+d.dragSelector);){if(c==this)return;c=c.parentNode}a!=null&&a.draggedItem!=null&&a.dropItem();b(e.target).css("cursor","move");a=g[b(this).attr("data-listIdx")];a.draggedItem= b(c).closest(d.itemSelector);var c=parseInt(a.draggedItem.css("marginTop")),f=parseInt(a.draggedItem.css("marginLeft"));a.offset=a.draggedItem.offset();a.offset.top=e.pageY-a.offset.top+(isNaN(c)?0:c)-1;a.offset.left=e.pageX-a.offset.left+(isNaN(f)?0:f)-1;if(!d.dragBetween)c=b(a.container).outerHeight()==0?Math.max(1,Math.round(0.5+b(a.container).children(d.itemSelector).size()*a.draggedItem.outerWidth()/b(a.container).outerWidth()))*a.draggedItem.outerHeight():b(a.container).outerHeight(),a.offsetLimit= b(a.container).offset(),a.offsetLimit.right=a.offsetLimit.left+b(a.container).outerWidth()-a.draggedItem.outerWidth(),a.offsetLimit.bottom=a.offsetLimit.top+c-a.draggedItem.outerHeight();var c=a.draggedItem.height(),f=a.draggedItem.width(),h=a.draggedItem.attr("style");a.draggedItem.attr("data-origStyle",h?h:"");d.itemSelector=="tr"?(a.draggedItem.children().each(function(){b(this).width(b(this).width())}),a.placeHolderItem=a.draggedItem.clone().attr("data-placeHolder",!0),a.draggedItem.after(a.placeHolderItem), a.placeHolderItem.children().each(function(){b(this).css({borderWidth:0,width:b(this).width()+1,height:b(this).height()+1}).html("&nbsp;")})):(a.draggedItem.after(d.placeHolderTemplate),a.placeHolderItem=a.draggedItem.next().css({height:c,width:f}).attr("data-placeHolder",!0));a.draggedItem.css({position:"absolute",opacity:0.8,"z-index":999,height:c,width:f});b(g).each(function(a,b){b.createDropTargets();b.buildPositionTable()});a.scroll={moveX:0,moveY:0,maxX:b(document).width()-b(window).width(), maxY:b(document).height()-b(window).height()};a.scroll.scrollY=window.setInterval(function(){if(d.scrollContainer!=window)b(d.scrollContainer).scrollTop(b(d.scrollContainer).scrollTop()+a.scroll.moveY);else{var c=b(d.scrollContainer).scrollTop();if(a.scroll.moveY>0&&c<a.scroll.maxY||a.scroll.moveY<0&&c>0)b(d.scrollContainer).scrollTop(c+a.scroll.moveY),a.draggedItem.css("top",a.draggedItem.offset().top+a.scroll.moveY+1)}},10);a.scroll.scrollX=window.setInterval(function(){if(d.scrollContainer!=window)b(d.scrollContainer).scrollLeft(b(d.scrollContainer).scrollLeft()+ a.scroll.moveX);else{var c=b(d.scrollContainer).scrollLeft();if(a.scroll.moveX>0&&c<a.scroll.maxX||a.scroll.moveX<0&&c>0)b(d.scrollContainer).scrollLeft(c+a.scroll.moveX),a.draggedItem.css("left",a.draggedItem.offset().left+a.scroll.moveX+1)}},10);a.setPos(e.pageX,e.pageY);b(document).bind("selectstart",a.stopBubble);b(document).bind("mousemove",a.swapItems);b(document).bind("mouseup",a.dropItem);d.scrollContainer!=window&&b(window).bind("DOMMouseScroll mousewheel",a.wheel);return!1}},setPos:function(e, c){var f=c-this.offset.top,h=e-this.offset.left;d.dragBetween||(f=Math.min(this.offsetLimit.bottom,Math.max(f,this.offsetLimit.top)),h=Math.min(this.offsetLimit.right,Math.max(h,this.offsetLimit.left)));this.draggedItem.parents().each(function(){if(b(this).css("position")!="static"&&(!b.browser.mozilla||b(this).css("display")!="table")){var a=b(this).offset();f-=a.top;h-=a.left;return!1}});if(d.scrollContainer==window)c-=b(window).scrollTop(),e-=b(window).scrollLeft(),c=Math.max(0,c-b(window).height()+ 5)+Math.min(0,c-5),e=Math.max(0,e-b(window).width()+5)+Math.min(0,e-5);else var l=b(d.scrollContainer),g=l.offset(),c=Math.max(0,c-l.height()-g.top)+Math.min(0,c-g.top),e=Math.max(0,e-l.width()-g.left)+Math.min(0,e-g.left);a.scroll.moveX=e==0?0:e*d.scrollSpeed/Math.abs(e);a.scroll.moveY=c==0?0:c*d.scrollSpeed/Math.abs(c);this.draggedItem.css({top:f,left:h})},wheel:function(e){if((b.browser.safari||b.browser.mozilla)&&a&&d.scrollContainer!=window){var c=b(d.scrollContainer),f=c.offset();e.pageX>f.left&& e.pageX<f.left+c.width()&&e.pageY>f.top&&e.pageY<f.top+c.height()&&(f=e.detail?e.detail*5:e.wheelDelta/-2,c.scrollTop(c.scrollTop()+f),e.preventDefault())}},buildPositionTable:function(){var a=this.draggedItem==null?null:this.draggedItem.get(0),c=[];b(this.container).children(d.itemSelector).each(function(d,h){if(h!=a){var g=b(h).offset();g.right=g.left+b(h).width();g.bottom=g.top+b(h).height();g.elm=h;c.push(g)}});this.pos=c},dropItem:function(){if(a.draggedItem!=null){b(a.container).find(d.dragSelector).css("cursor", "pointer");a.placeHolderItem.before(a.draggedItem);var e=a.draggedItem.attr("data-origStyle");a.draggedItem.attr("style",e);e==""&&a.draggedItem.removeAttr("style");a.draggedItem.removeAttr("data-origStyle");a.placeHolderItem.remove();b("[data-dropTarget]").remove();window.clearInterval(a.scroll.scrollY);window.clearInterval(a.scroll.scrollX);var c=!1;b(g).each(function(){b(this.container).children(d.itemSelector).each(function(a){parseInt(b(this).attr("data-itemIdx"))!=a&&(c=!0,b(this).attr("data-itemIdx", a))})});c&&d.dragEnd.apply(a.draggedItem);a.draggedItem=null;b(document).unbind("selectstart",a.stopBubble);b(document).unbind("mousemove",a.swapItems);b(document).unbind("mouseup",a.dropItem);d.scrollContainer!=window&&b(window).unbind("DOMMouseScroll mousewheel",a.wheel);return!1}},stopBubble:function(){return!1},swapItems:function(e){if(a.draggedItem==null)return!1;a.setPos(e.pageX,e.pageY);for(var c=a.findPos(e.pageX,e.pageY),f=a,h=0;c==-1&&d.dragBetween&&h<g.length;h++)c=g[h].findPos(e.pageX, e.pageY),f=g[h];if(c==-1||b(f.pos[c].elm).attr("data-placeHolder"))return!1;j==null||j.top>a.draggedItem.offset().top||j.left>a.draggedItem.offset().left?b(f.pos[c].elm).before(a.placeHolderItem):b(f.pos[c].elm).after(a.placeHolderItem);b(g).each(function(a,b){b.createDropTargets();b.buildPositionTable()});j=a.draggedItem.offset();return!1},findPos:function(a,b){for(var d=0;d<this.pos.length;d++)if(this.pos[d].left<a&&this.pos[d].right>a&&this.pos[d].top<b&&this.pos[d].bottom>b)return d;return-1}, createDropTargets:function(){d.dragBetween&&b(g).each(function(){var d=b(this.container).find("[data-placeHolder]"),c=b(this.container).find("[data-dropTarget]");d.size()>0&&c.size()>0?c.remove():d.size()==0&&c.size()==0&&(b(this.container).append(a.placeHolderItem.removeAttr("data-placeHolder").clone().attr("data-dropTarget",!0)),a.placeHolderItem.attr("data-placeHolder",!0))})}};m.init();g.push(m)});return this};b.fn.dragsort.defaults={itemSelector:"li",dragSelector:"li",dragSelectorExclude:"input, textarea, a[href]", dragEnd:function(){},dragBetween:!1,placeHolderTemplate:"<li>&nbsp;</li>",scrollContainer:window,scrollSpeed:5}})(jQuery);
-
-
 
 	if (localStorageFail) {
 		RESFail = "Sorry, but localStorage seems inaccessible. Reddit Enhancement Suite can't work without it. \n\n";
@@ -17071,7 +17013,7 @@ guiders = (function($){
 			}, 500);
 		}
 		konami.load();
-	
+
 	}
 }
 
@@ -17174,7 +17116,7 @@ function setUpRESStorage (response) {
 				}
 				if (!fromBG) {
 					opera.extension.postMessage(JSON.stringify(thisJSON));
-				} 
+				}
 			}
 		}
 		RESStorage.removeItem = function(key) {
@@ -17207,7 +17149,7 @@ function setUpRESStorage (response) {
 			}
 			if (!fromBG) {
 				self.postMessage(thisJSON);
-			} 
+			}
 		}
 		RESStorage.removeItem = function(key) {
 			// delete it locally in the RESStorage variable, but also delete it from the extension's localStorage...
@@ -17264,7 +17206,7 @@ if (typeof(opera) != 'undefined') {
 	// I freaking hate having to use different code that won't run in other browsers to log debugs, so I'm overriding console.log with opera.postError here
 	// so I don't have to litter my code with different statements for different browsers when debugging.
 	console.log = opera.postError;
-	opera.extension.addEventListener( "message", operaMessageHandler, false);	
+	opera.extension.addEventListener( "message", operaMessageHandler, false);
 	window.addEventListener("DOMContentLoaded", function(u) {
 		// we've got opera, let's check for old localStorage...
 		// RESInit() will be called from operaMessageHandler()
@@ -17281,7 +17223,7 @@ if (typeof(opera) != 'undefined') {
 				requestType: 'getLocalStorage'
 			}
 			chrome.extension.sendRequest(thisJSON, function(response) {
-				// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy 
+				// Does RESStorage have actual data in it?  If it doesn't, they're a legacy user, we need to copy
 				// old schol localStorage from the foreground page to the background page to keep their settings...
 				if (typeof(response.importedFromForeground) == 'undefined') {
 					// it doesn't exist.. copy it over...
@@ -17333,8 +17275,6 @@ if (typeof(opera) != 'undefined') {
 	})();
 }
 
-
-
 var lastPerf = 0;
 function perfTest(name) {
 	var d = new Date();
@@ -17342,5 +17282,4 @@ function perfTest(name) {
 	console.log(name+' executed. Diff since last: ' + diff +'ms');
 	lastPerf=d.getTime();
 }
-
 
